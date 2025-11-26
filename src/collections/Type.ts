@@ -6,7 +6,7 @@ export const Types: CollectionConfig = {
     useAsTitle: 'typeName',
   },
   timestamps: true,
-  fields: [ 
+  fields: [
     {
       name: 'typeName',
       type: 'text',
@@ -17,11 +17,10 @@ export const Types: CollectionConfig = {
       type: 'textarea',
     },
     {
-      name: 'model',
+      name: 'category',
       type: 'relationship',
-      relationTo: 'models',
+      relationTo: 'categories',
       required: true,
     },
-   
   ],
 }
