@@ -20,7 +20,7 @@ export const Products: CollectionConfig = {
       unique: true,
     },
     {
-      name:'price',
+      name: 'price',
       type: 'number',
       required: true,
     },
@@ -35,16 +35,10 @@ export const Products: CollectionConfig = {
       relationTo: 'models',
     },
     {
-      name: 'type',
+      name: 'variants',
       type: 'relationship',
-      relationTo: 'types',
-    },
-    {
-      name: 'categories',
-      type: 'relationship',
-      relationTo: 'categories',
+      relationTo: 'variants',
       hasMany: true,
-      required: true,
     },
   ],
 }
