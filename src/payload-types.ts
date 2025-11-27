@@ -168,7 +168,7 @@ export interface Model {
 export interface Type {
   id: string;
   typeName: string;
-  description?: string | null;
+  typeCode: string;
   model: string | Model;
   updatedAt: string;
   createdAt: string;
@@ -194,6 +194,7 @@ export interface Product {
   productCode: string;
   price: number;
   stock: number;
+  status: 'active' | 'inactive';
   model?: (string | null) | Model;
   type?: (string | null) | Type;
   categories: (string | Category)[];
@@ -355,7 +356,7 @@ export interface ModelsSelect<T extends boolean = true> {
  */
 export interface TypesSelect<T extends boolean = true> {
   typeName?: T;
-  description?: T;
+  typeCode?: T;
   model?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -379,6 +380,7 @@ export interface ProductsSelect<T extends boolean = true> {
   productCode?: T;
   price?: T;
   stock?: T;
+  status?: T;
   model?: T;
   type?: T;
   categories?: T;

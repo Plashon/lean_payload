@@ -20,14 +20,46 @@ export const Products: CollectionConfig = {
       unique: true,
     },
     {
-      name:'price',
+      name: 'price',
       type: 'number',
       required: true,
+      hooks: {
+        beforeChange: [
+          async ({ value }) => {
+            if (value < 0) {
+              value = 0
+              throw new Error('Price cannot be negative')
+            }
+            return value
+          },
+        ],
+      },
     },
     {
       name: 'stock',
       type: 'number',
       required: true,
+    },
+    {
+      name: 'status',
+      type: 'select',
+      options: [
+        { label: 'Active', value: 'active' },
+        { label: 'Inactive', value: 'inactive' },
+      ],
+      defaultValue: 'active',
+      required: true,
+      hooks: {
+        beforeChange: [
+          async ({ data }) => {
+            if (data === null) {
+              data === 'active'
+              throw new Error('Price cannot be negative')
+            }
+            return data
+          },
+        ],
+      },
     },
     {
       name: 'model',
