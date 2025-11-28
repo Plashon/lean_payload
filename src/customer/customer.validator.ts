@@ -1,5 +1,4 @@
 import z from 'zod'
-import { Customers } from '@/collections/Customer'
 
 const CustomerSchema = z.object({
   email: z.string().email('Invalid email address'),

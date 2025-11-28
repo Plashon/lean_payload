@@ -40,7 +40,7 @@ export const getAllCustomers = async (payload: Payload) => {
       },
     }
   } catch (error) {
-    console.error('Error fetching customers:', error)
+    // console.error('Error fetching customers:', error)
     return {
       status: 500,
       body: {
@@ -259,7 +259,7 @@ export const updateCustomer = async (payload: Payload, id: string, data: unknown
       },
     }
   } catch (error) {
-    console.error('Error updating customer:', error)
+   // console.error('Error updating customer:', error)
     return {
       status: 500,
       body: {
@@ -299,16 +299,7 @@ export const deleteCustomer = async (payload: Payload, id: string) => {
       },
     }
   } catch (error) {
-    console.error('Error deleting customer:', error)
-    if (error instanceof Error && error.message.includes('not found')) {
-      return {
-        status: 404,
-        body: {
-          success: false,
-          message: 'Customer not found',
-        },
-      }
-    }
+    //console.error('Error deleting customer:', error)
     return {
       status: 500,
       body: {

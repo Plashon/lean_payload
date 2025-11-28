@@ -15,7 +15,7 @@ export const Categories: CollectionConfig = {
       required: true,
     },
     {
-      name:'cayegoryCode',
+      name:'categoryCode',
       label: 'Category code',
       type: 'text',
       required: true,

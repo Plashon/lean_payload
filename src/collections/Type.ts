@@ -18,10 +18,10 @@ export const Types: CollectionConfig = {
       required: true,
     },
     {
-      name: 'model',
+      name: 'catagory',
       type: 'relationship',
-      relationTo: 'models',
-      required: true,
+      relationTo: 'categories',
+      required: false,
     },
   ],
 }

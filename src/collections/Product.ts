@@ -51,12 +51,11 @@ export const Products: CollectionConfig = {
       required: true,
       hooks: {
         beforeChange: [
-          async ({ data }) => {
-            if (data === null) {
-              data === 'active'
-              throw new Error('Price cannot be negative')
+          async ({ value }) => {
+            if (value === null) {
+              return 'active' 
             }
-            return data
+            return value
           },
         ],
       },
@@ -65,18 +64,6 @@ export const Products: CollectionConfig = {
       name: 'model',
       type: 'relationship',
       relationTo: 'models',
-    },
-    {
-      name: 'type',
-      type: 'relationship',
-      relationTo: 'types',
-    },
-    {
-      name: 'categories',
-      type: 'relationship',
-      relationTo: 'categories',
-      hasMany: true,
-      required: true,
     },
   ],
 }
