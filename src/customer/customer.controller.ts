@@ -1,312 +1,269 @@
-import { Payload } from 'payload'
 import CustomerValidator, {
   CreateCustomerValidator,
   UpdateCustomerValidator,
 } from './customer.validator'
-import { ZodError } from 'zod'
 
-/**
- * Handle validation errors and return formatted response
- */
-const handleValidationError = (error: ZodError) => {
-  const formattedErrors = error.issues.map((err) => ({
-    field: err.path.join('.'),
-    message: err.message,
-  }))
-  return {
-    status: 400,
-    body: {
-      success: false,
-      message: 'Validation failed',
-      errors: formattedErrors,
-    },
-  }
-}
-
-/**
- * Get all customers
- */
-export const getAllCustomers = async (payload: Payload) => {
+export const createCustomer = async (req: any) => {
   try {
-    const customers = await payload.find({
-      collection: 'customers',
-    })
+    const data = await req.json()
+    const { email, name, password, phone } = data as CreateCustomerValidator
 
-    return {
-      status: 200,
-      body: {
-        success: true,
-        data: customers,
-      },
-    }
-  } catch (error) {
-    // console.error('Error fetching customers:', error)
-    return {
-      status: 500,
-      body: {
-        success: false,
-        message: 'Failed to fetch customers',
-        error: error instanceof Error ? error.message : String(error),
-      },
-    }
-  }
-}
-
-/**
- * Get customer by ID
- */
-export const getCustomerById = async (payload: Payload, id: string) => {
-  try {
-    if (!id) {
-      return {
-        status: 400,
-        body: {
-          success: false,
-          message: 'Customer ID is required',
-        },
-      }
-    }
-
-    const customer = await payload.findByID({
-      collection: 'customers',
-      id,
-    })
-
-    if (!customer) {
-      return {
-        status: 404,
-        body: {
-          success: false,
-          message: 'Customer not found',
-        },
-      }
-    }
-
-    return {
-      status: 200,
-      body: {
-        success: true,
-        data: customer,
-      },
-    }
-  } catch (error) {
-    console.error('Error fetching customer:', error)
-    return {
-      status: 500,
-      body: {
-        success: false,
-        message: 'Failed to fetch customer',
-        error: error instanceof Error ? error.message : String(error),
-      },
-    }
-  }
-}
-
-/**
- * Create a new customer
- */
-export const createCustomer = async (payload: Payload, data: unknown) => {
-  try {
-    // Validate request body
-    const validationResult = CustomerValidator.CreateCustomer.safeParse(data)
-
-    if (!validationResult.success) {
-      return handleValidationError(validationResult.error)
-    }
-
-    const customerData: CreateCustomerValidator = validationResult.data
-
-    // Check if customer with this email already exists
-    const existingCustomers = await payload.find({
+    // Check if customer with the same email already exists
+    const existingCustomers = await req.payload.find({
       collection: 'customers',
       where: {
         email: {
-          equals: customerData.email,
+          equals: email,
         },
       },
     })
 
     if (existingCustomers.docs && existingCustomers.docs.length > 0) {
-      return {
-        status: 409,
-        body: {
+      return Response.json(
+        {
           success: false,
-          message: 'Customer with this email already exists',
+          message: 'มีลูกค้าที่ใช้อีเมลนี้อยู่แล้ว',
         },
-      }
+        { status: 409 },
+      )
     }
 
-    const newCustomer = await payload.create({
+    const newCustomer = await req.payload.create({
       collection: 'customers',
-      data: customerData,
+      data: {
+        email,
+        name,
+        password,
+        phone,
+      },
     })
 
-    return {
-      status: 201,
-      body: {
+    return Response.json(
+      {
         success: true,
-        message: 'Customer created successfully',
+        message: 'สร้างลูกค้าเรียบร้อยแล้ว',
         data: newCustomer,
       },
-    }
+      { status: 201 },
+    )
   } catch (error) {
-    console.error('Error creating customer:', error)
-    return {
-      status: 500,
-      body: {
+    return Response.json(
+      {
         success: false,
-        message: 'Failed to create customer',
+        message: 'ไม่สามารถสร้างลูกค้าได้',
         error: error instanceof Error ? error.message : String(error),
       },
-    }
+      { status: 500 },
+    )
   }
 }
 
-/**
- * Update a customer
- */
-export const updateCustomer = async (payload: Payload, id: string, data: unknown) => {
+export const getAllCustomers = async (req: any) => {
   try {
-    if (!id) {
-      return {
-        status: 400,
-        body: {
-          success: false,
-          message: 'Customer ID is required',
-        },
-      }
-    }
-
-    // Validate request body
-    const validationResult = CustomerValidator.UpdateCustomer.safeParse(data)
-
-    if (!validationResult.success) {
-      return handleValidationError(validationResult.error)
-    }
-
-    const customerData: UpdateCustomerValidator = validationResult.data
-
-    // Fetch existing customer
-    const existingCustomer = await payload.findByID({
-      collection: 'customers',
-      id,
-    })
-
-    if (!existingCustomer) {
-      return {
-        status: 404,
-        body: {
-          success: false,
-          message: 'Customer not found',
-        },
-      }
-    }
-
-    // Check if email is being updated and if it already exists (for another customer)
-    if (customerData.email && customerData.email !== existingCustomer.email) {
-      const existingEmails = await payload.find({
-        collection: 'customers',
-        where: {
-          email: {
-            equals: customerData.email,
-          },
-        },
-      })
-
-      if (existingEmails.docs && existingEmails.docs.length > 0) {
-        return {
-          status: 409,
-          body: {
-            success: false,
-            message: 'Customer with this email already exists',
-          },
-        }
-      }
-    }
-
-    // Check if data has changed
-    const hasChanges = Object.keys(customerData).some((key) => {
-      const typedKey = key as keyof typeof customerData
-      return (
-        (customerData[typedKey] as unknown) !==
-        (existingCustomer as unknown as Record<string, unknown>)[key]
+    if (req.user?.collection !== 'admins') {
+      return Response.json(
+        { success: false, message: 'ไม่สามารถดึงข้อมูลลูกค้าได้ - ไม่มีสิทธิ์' },
+        { status: 403 },
       )
-    })
-
-    if (!hasChanges) {
-      return {
-        status: 200,
-        body: {
-          success: true,
-          message: 'No data has changed',
-          data: existingCustomer,
-        },
-      }
     }
 
-    const updatedCustomer = await payload.update({
+    const customers = await req.payload.find({
       collection: 'customers',
-      id,
-      data: customerData,
+      limit: 100,
     })
 
-    return {
-      status: 200,
-      body: {
+    if (!customers.docs || customers.docs.length === 0) {
+      return Response.json(
+        {
+          success: false,
+          message: 'ไม่พบข้อมูลลูกค้า',
+        },
+        { status: 404 },
+      )
+    }
+    return Response.json(
+      {
         success: true,
-        message: 'Customer updated successfully',
+        data: customers.docs,
+      },
+      { status: 200 },
+    )
+  } catch (error) {
+    return Response.json(
+      {
+        success: false,
+        message: 'ไม่สามารถดึงข้อมูลลูกค้าได้',
+        error: error instanceof Error ? error.message : String(error),
+      },
+      { status: 500 },
+    )
+  }
+}
+
+export const getCustomerById = async (req: any) => {
+  // console.log('REQ KEYS =>', Object.keys(req))
+  // console.log('PARAMS =>', req.params)
+  // console.log('ROUTE PARAMS =>', req.routeParams)
+
+  try {
+    if (req.user?.collection !== 'admins') {
+      return Response.json(
+        { success: false, message: 'ไม่สามารถดึงข้อมูลลูกค้าได้ - ไม่มีสิทธิ์' },
+        { status: 403 },
+      )
+    }
+
+    const { id } = req.routeParams
+    const customer = await req.payload.findByID({
+      collection: 'customers',
+      id,
+    })
+    if (!customer) {
+      return Response.json(
+        {
+          success: false,
+          message: 'ไม่พบลูกค้าที่ระบุ',
+        },
+        { status: 404 },
+      )
+    }
+    return Response.json(
+      {
+        success: true,
+        data: customer,
+      },
+      { status: 200 },
+    )
+  } catch (error) {
+    return Response.json(
+      {
+        success: false,
+        message: 'ไม่สามารถดึงข้อมูลลูกค้าได้',
+        error: error instanceof Error ? error.message : String(error),
+      },
+      { status: 500 },
+    )
+  }
+}
+
+export const updateCustomer = async (req: any) => {
+  try {
+    if (req.user?.collection !== 'admins') {
+      return Response.json(
+        { success: false, message: 'ไม่สามารถดึงข้อมูลลูกค้าได้ - ไม่มีสิทธิ์' },
+        { status: 403 },
+      )
+    }
+
+    const { id } = await req.routeParams
+    const customer = await req.payload.findByID({
+      collection: 'customers',
+      id,
+    })
+    if (!customer) {
+      return Response.json(
+        {
+          success: false,
+          message: 'ไม่พบลูกค้าที่ระบุ',
+        },
+        { status: 404 },
+      )
+    }
+
+    const updateData = await req.json()
+    const { email, name, phone } = updateData as UpdateCustomerValidator
+
+    const existingEmail = await req.payload.find({
+      collection: 'customers',
+      where: {
+        email: {
+          equals: email,
+        },
+      },
+    })
+
+    if (existingEmail.docs && existingEmail.docs.length > 0) {
+      return Response.json(
+        {
+          success: false,
+          message: 'มีลูกค้าที่ใช้อีเมลนี้อยู่แล้ว',
+        },
+        { status: 409 },
+      )
+    }
+
+    const updatedCustomer = await req.payload.update({
+      collection: 'customers',
+      id,
+      data: {
+        email,
+        name,
+        phone,
+      },
+    })
+    return Response.json(
+      {
+        success: true,
+        message: 'อัปเดตข้อมูลลูกค้าเรียบร้อบแล้ว',
         data: updatedCustomer,
       },
-    }
-  } catch (error) {
-   // console.error('Error updating customer:', error)
-    return {
-      status: 500,
-      body: {
-        success: false,
-        message: 'Failed to update customer',
-        error: error instanceof Error ? error.message : String(error),
+      {
+        status: 200,
       },
-    }
+    )
+  } catch (error) {
+    return Response.json({
+      success: false,
+      message: 'ไม่สามารถอัปเดตข้อมูลลูกค้าได้',
+      error: error instanceof Error ? error.message : String(error),
+    })
   }
 }
 
-/**
- * Delete a customer
- */
-export const deleteCustomer = async (payload: Payload, id: string) => {
+export const deleteCustomer = async (req: any) => {
   try {
-    if (!id) {
-      return {
-        status: 400,
-        body: {
-          success: false,
-          message: 'Customer ID is required',
-        },
-      }
+    if (req.user?.collection !== 'admins') {
+      return Response.json(
+        { success: false, message: 'ไม่สามารถลบข้อมูลลูกค้าได้ - ไม่มีสิทธิ์' },
+        { status: 403 },
+      )
     }
-
-    await payload.delete({
+    const { id } = await req.routeParams
+    const customer = await req.payload.findByID({
       collection: 'customers',
       id,
     })
-
-    return {
-      status: 200,
-      body: {
-        success: true,
-        message: 'Customer deleted successfully',
-      },
+    if (!customer) {
+      return Response.json(
+        {
+          success: false,
+          message: 'ไม่พบลูกค้าที่ระบุ',
+        },
+        { status: 404 },
+      )
     }
+
+    await req.payload.delete({
+      collection: 'customers',
+      id,
+    })
+    return Response.json(
+      {
+        success: true,
+        message: 'ลบข้อมูลลูกค้าเรียบร้อยแล้ว',
+      },
+      {
+        status: 200,
+      },
+    )
   } catch (error) {
-    //console.error('Error deleting customer:', error)
-    return {
-      status: 500,
-      body: {
+    return Response.json(
+      {
         success: false,
-        message: 'Failed to delete customer',
+        message: 'ไม่สามารถลบข้อมูลลูกค้าได้',
         error: error instanceof Error ? error.message : String(error),
       },
-    }
+      { status: 500 },
+    )
   }
 }

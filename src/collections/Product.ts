@@ -1,10 +1,16 @@
 import type { CollectionConfig } from 'payload'
-
+import { admin } from '@/access/admin'
 export const Products: CollectionConfig = {
   slug: 'products',
   admin: {
     useAsTitle: 'productName',
     defaultColumns: ['productName'],
+  },
+  access: {
+    read: () => true,
+    create: admin,
+    update: admin,
+    delete: admin,
   },
   timestamps: true,
   fields: [
@@ -49,16 +55,6 @@ export const Products: CollectionConfig = {
       ],
       defaultValue: 'active',
       required: true,
-      hooks: {
-        beforeChange: [
-          async ({ value }) => {
-            if (value === null) {
-              return 'active' 
-            }
-            return value
-          },
-        ],
-      },
     },
     {
       name: 'model',

@@ -64,6 +64,7 @@ export type SupportedTimezones =
 export interface Config {
   auth: {
     admins: AdminAuthOperations;
+    customers: CustomerAuthOperations;
   };
   blocks: {};
   collections: {
@@ -100,15 +101,37 @@ export interface Config {
   globals: {};
   globalsSelect: {};
   locale: null;
-  user: Admin & {
-    collection: 'admins';
-  };
+  user:
+    | (Admin & {
+        collection: 'admins';
+      })
+    | (Customer & {
+        collection: 'customers';
+      });
   jobs: {
     tasks: unknown;
     workflows: unknown;
   };
 }
 export interface AdminAuthOperations {
+  forgotPassword: {
+    email: string;
+    password: string;
+  };
+  login: {
+    email: string;
+    password: string;
+  };
+  registerFirstUser: {
+    email: string;
+    password: string;
+  };
+  unlock: {
+    email: string;
+    password: string;
+  };
+}
+export interface CustomerAuthOperations {
   forgotPassword: {
     email: string;
     password: string;
@@ -217,11 +240,25 @@ export interface Variant {
  */
 export interface Customer {
   id: string;
-  email: string;
   name: string;
   phone?: string | null;
   updatedAt: string;
   createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -276,10 +313,15 @@ export interface PayloadLockedDocument {
         value: string | Customer;
       } | null);
   globalSlug?: string | null;
-  user: {
-    relationTo: 'admins';
-    value: string | Admin;
-  };
+  user:
+    | {
+        relationTo: 'admins';
+        value: string | Admin;
+      }
+    | {
+        relationTo: 'customers';
+        value: string | Customer;
+      };
   updatedAt: string;
   createdAt: string;
 }
@@ -289,10 +331,15 @@ export interface PayloadLockedDocument {
  */
 export interface PayloadPreference {
   id: string;
-  user: {
-    relationTo: 'admins';
-    value: string | Admin;
-  };
+  user:
+    | {
+        relationTo: 'admins';
+        value: string | Admin;
+      }
+    | {
+        relationTo: 'customers';
+        value: string | Customer;
+      };
   key?: string | null;
   value?:
     | {
@@ -400,11 +447,24 @@ export interface VariantsSelect<T extends boolean = true> {
  * via the `definition` "customers_select".
  */
 export interface CustomersSelect<T extends boolean = true> {
-  email?: T;
   name?: T;
   phone?: T;
   updatedAt?: T;
   createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
