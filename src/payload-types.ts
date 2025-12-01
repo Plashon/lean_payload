@@ -193,7 +193,7 @@ export interface Type {
   id: string;
   typeName: string;
   typeCode: string;
-  catagory?: (string | null) | Category;
+  category?: (string | null) | Category;
   updatedAt: string;
   createdAt: string;
 }
@@ -220,6 +220,7 @@ export interface Product {
   stock: number;
   status: 'active' | 'inactive';
   model?: (string | null) | Model;
+  variant?: (string | Variant)[] | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -404,7 +405,7 @@ export interface ModelsSelect<T extends boolean = true> {
 export interface TypesSelect<T extends boolean = true> {
   typeName?: T;
   typeCode?: T;
-  catagory?: T;
+  category?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -429,6 +430,7 @@ export interface ProductsSelect<T extends boolean = true> {
   stock?: T;
   status?: T;
   model?: T;
+  variant?: T;
   updatedAt?: T;
   createdAt?: T;
 }

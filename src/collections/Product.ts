@@ -61,5 +61,11 @@ export const Products: CollectionConfig = {
       type: 'relationship',
       relationTo: 'models',
     },
+    {
+      name: 'variant',
+      type: 'relationship',
+      relationTo: 'variants',
+      hasMany: true,
+    },
   ],
 }
