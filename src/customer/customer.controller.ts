@@ -114,6 +114,13 @@ export const getCustomerById = async (req: any) => {
     }
 
     const { id } = req.routeParams
+    if (!id) {
+      return Response.json({
+        success: false,
+        message: 'กรณาระบุ ID ลูกค้า',
+      })
+    }
+
     const customer = await req.payload.findByID({
       collection: 'customers',
       id,
@@ -156,6 +163,13 @@ export const updateCustomer = async (req: any) => {
     }
 
     const { id } = await req.routeParams
+    if (!id) {
+      return Response.json({
+        success: false,
+        message: 'กรณาระบุ ID ลูกค้า',
+      })
+    }
+
     const customer = await req.payload.findByID({
       collection: 'customers',
       id,
@@ -229,6 +243,13 @@ export const deleteCustomer = async (req: any) => {
       )
     }
     const { id } = await req.routeParams
+    if (!id) {
+      return Response.json({
+        success: false,
+        message: 'กรณาระบุ ID ลูกค้า',
+      })
+    }
+
     const customer = await req.payload.findByID({
       collection: 'customers',
       id,
