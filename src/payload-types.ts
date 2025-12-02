@@ -219,8 +219,8 @@ export interface Product {
   price: number;
   stock: number;
   status: 'active' | 'inactive';
-  model?: (string | null) | Model;
-  variant?: (string | Variant)[] | null;
+  model: string | Model;
+  variant: (string | Variant)[];
   updatedAt: string;
   createdAt: string;
 }
