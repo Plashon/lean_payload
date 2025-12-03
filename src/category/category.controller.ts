@@ -58,28 +58,51 @@ export const createCategory = async (req: any) => {
 
 export const getAllCategories = async (req: any) => {
   try {
+    const {
+      page = 1,
+      limit = 10,
+      search,
+      type, // filter by type
+      sortBy = '-createdAt',
+    } = req.query
+
+    const where: any = {}
+
+    if (search) {
+      where.name = { contains: search, mode: 'insensitive' }
+    }
+
+    if (type) {
+      where.type = { equals: type }
+    }
+
     const categories = await req.payload.find({
       collection: 'categories',
-      limit: 100,
+      where,
+      limit: Number(limit),
+      page: Number(page),
+      sort: sortBy,
+      depth: 1, // ดึง type มาด้วย
     })
-    if (!categories || categories.totalDocs === 0) {
-      return Response.json(
-        {
-          success: false,
-          message: 'ไม่พบหมวดหมู่สินค้า',
-        },
-        { status: 404 },
-      )
-    }
+
     return Response.json(
       {
         success: true,
         message: 'ดึงข้อมูลหมวดหมู่สินค้าสำเร็จ',
         data: categories.docs,
+        pagination: {
+          total: categories.totalDocs,
+          page: categories.page,
+          limit: Number(limit),
+          totalPages: categories.totalPages,
+          hasNextPage: categories.hasNextPage,
+          hasPrevPage: categories.hasPrevPage,
+        },
       },
       { status: 200 },
     )
   } catch (error) {
+    console.error(error)
     return Response.json(
       {
         success: false,

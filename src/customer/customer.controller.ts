@@ -62,33 +62,68 @@ export const getAllCustomers = async (req: any) => {
   try {
     if (req.user?.collection !== 'admins') {
       return Response.json(
-        { success: false, message: 'ไม่สามารถดึงข้อมูลลูกค้าได้ - ไม่มีสิทธิ์' },
+        { success: false, message: 'ไม่มีสิทธิ์เข้าถึงข้อมูลลูกค้า' },
         { status: 403 },
       )
     }
 
+    const {
+      page = 1,
+      limit = 10,
+      search,
+      email,
+      phoneNumber,
+      sortBy = '-createdAt', // เรียงลำดับ: createdAt, email, name
+    } = req.query
+
+    const where: any = {}
+
+    // Search: ค้นหาจาก name, email, phoneNumber
+    if (search) {
+      where.or = [
+        { name: { contains: search, mode: 'insensitive' } },
+        { email: { contains: search, mode: 'insensitive' } },
+        { phoneNumber: { contains: search, mode: 'insensitive' } },
+      ]
+    }
+
+    // Filter by email
+    if (email) {
+      where.email = { equals: email }
+    }
+
+    // Filter by phoneNumber
+    if (phoneNumber) {
+      where.phoneNumber = { contains: phoneNumber }
+    }
+
     const customers = await req.payload.find({
       collection: 'customers',
-      limit: 100,
+      where,
+      limit: Number(limit),
+      page: Number(page),
+      sort: sortBy,
+      depth: 0,
     })
 
-    if (!customers.docs || customers.docs.length === 0) {
-      return Response.json(
-        {
-          success: false,
-          message: 'ไม่พบข้อมูลลูกค้า',
-        },
-        { status: 404 },
-      )
-    }
     return Response.json(
       {
         success: true,
+        message: 'ดึงข้อมูลลูกค้าสำเร็จ',
         data: customers.docs,
+        pagination: {
+          total: customers.totalDocs,
+          page: customers.page,
+          limit: Number(limit),
+          totalPages: customers.totalPages,
+          hasNextPage: customers.hasNextPage,
+          hasPrevPage: customers.hasPrevPage,
+        },
       },
       { status: 200 },
     )
   } catch (error) {
+    console.error(error)
     return Response.json(
       {
         success: false,

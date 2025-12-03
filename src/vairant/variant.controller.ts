@@ -45,19 +45,10 @@ export const createVariant = async (req: any) => {
 
 export const getAllVariants = async (req: any) => {
   try {
-    // Query parameters
-    const {
-      page = 1, // หน้าเริ่มต้น
-      limit = 10, // จำนวนต่อหน้า
-      search, // ค้นหาจากชื่อหรือรหัสตัวแปร
-    } = req.query
+    const { page = 1, limit = 10, search, sortBy = '-createdAt' } = req.query
 
-    // ---------------------------
-    // Build the "where" filter
-    // ---------------------------
     const where: any = {}
 
-    // Search by variantName or variantCode
     if (search) {
       where.or = [
         { variantName: { contains: search, mode: 'insensitive' } },
@@ -65,55 +56,32 @@ export const getAllVariants = async (req: any) => {
       ]
     }
 
-    // ---------------------------
-    // Query PayloadCMS
-    // ---------------------------
     const variants = await req.payload.find({
       collection: 'variants',
       where,
       limit: Number(limit),
       page: Number(page),
-      sort: '-createdAt',
+      sort: sortBy,
     })
-
-    if (!variants || variants.totalDocs === 0) {
-      return Response.json(
-        {
-          success: false,
-          message: 'ไม่พบตัวแปร',
-          pagination: {
-            total: 0,
-            page,
-            limit,
-            pages: 0,
-            hasNextPage: false,
-            hasPrevPage: false,
-          },
-        },
-        { status: 404 },
-      )
-    }
 
     return Response.json(
       {
         success: true,
         message: 'ดึงข้อมูลตัวแปรสำเร็จ',
         data: variants.docs,
-        total: variants.totalDocs,
-        page: variants.page,
-        totalPages: variants.totalPages,
         pagination: {
           total: variants.totalDocs,
           page: variants.page,
           limit: Number(limit),
-          pages: variants.totalPages,
+          totalPages: variants.totalPages,
           hasNextPage: variants.hasNextPage,
-          hasPrevPage: variants.page > 1,
+          hasPrevPage: variants.hasPrevPage,
         },
       },
       { status: 200 },
     )
   } catch (error) {
+    console.error(error)
     return Response.json(
       {
         success: false,
