@@ -1,6 +1,4 @@
-import { fa } from 'zod/locales'
 import { CreateTypeValidator, UpdateTypeValidator } from './types.validator'
-import { success } from 'zod'
 
 export const createType = async (req: any) => {
   try {
@@ -11,7 +9,8 @@ export const createType = async (req: any) => {
       )
     }
     const typeData = await req.json()
-    const { typeName, typeCode } = typeData as CreateTypeValidator
+    const { typeName, typeCode, category } = typeData as CreateTypeValidator
+
     const existingType = await req.payload.find({
       collection: 'types',
       where: {
@@ -36,9 +35,24 @@ export const createType = async (req: any) => {
         { status: 409 },
       )
     }
+    const categoryData = await req.payload.findByID({
+      collection: 'categories',
+      id: category,
+    })
+    if (!category) {
+      return Response.json(
+        {
+          success: false,
+          message: 'ไม่พบประเภทสินค้าที่ระบุ',
+        },
+        {
+          status: 404,
+        },
+      )
+    }
     const newType = await req.payload.create({
       collection: 'types',
-      data: { typeName, typeCode },
+      data: { typeName, typeCode, category: categoryData.id },
     })
     return Response.json(
       { success: true, message: 'สร้างประเภทสินค้าเรียบร้อยแล้ว', data: newType },
@@ -124,19 +138,22 @@ export const updateType = async (req: any) => {
     }
 
     const updateData = await req.json()
-    if (!updateData.typeName && !updateData.typeCode) {
+    const { typeName, typeCode, category } = updateData as UpdateTypeValidator
+    const categoryData = await req.payload.findByID({
+      collection: 'categories',
+      id: category,
+    })
+    if (!categoryData) {
       return Response.json(
         {
           success: false,
-          message: 'กรุณาระบุข้อมูลที่ต้องการแก้ไข',
+          message: 'ไม่พบประเภทสินค้าที่ระบุ',
         },
         {
-          status: 400,
+          status: 404,
         },
       )
     }
-    const { typeName, typeCode } = updateData as UpdateTypeValidator
-
     const existingType = await req.payload.find({
       collection: 'types',
       where: {
@@ -164,10 +181,11 @@ export const updateType = async (req: any) => {
         { status: 409 },
       )
     }
+
     const updatedType = await req.payload.update({
       collection: 'types',
       id: id,
-      data: { typeName, typeCode },
+      data: { typeName, typeCode, category: categoryData.id },
     })
     return Response.json(
       { success: true, message: 'แก้ไขข้อมูลประเภทสินค้าเรียบร้อยแล้ว', data: updatedType },
