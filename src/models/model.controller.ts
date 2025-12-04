@@ -1,12 +1,7 @@
-import { success } from 'zod'
 import { CreateModelValidator, UpdateModelValidator } from './model.validator'
 
 export const createModel = async (req: any) => {
-  console.log('test01')
-
   try {
-    console.log('test02')
-
     if (req.user?.collection !== 'admins') {
       return Response.json(
         { success: false, message: 'ไม่สามารถสร้างโมเดลสินค้าได้ - ไม่มีสิทธิ์' },
@@ -75,17 +70,51 @@ export const createModel = async (req: any) => {
 
 export const getAllModels = async (req: any) => {
   try {
+    const {
+      page,
+      limit,
+      search,
+      category, // filter by category
+      sortBy,
+    } = req.query
+
+    const where: any = {}
+
+    if (search) {
+      where.name = { contains: search, mode: 'insensitive' }
+    }
+
+    if (category) {
+      where.category = { equals: category }
+    }
+
     const models = await req.payload.find({
       collection: 'models',
+      where,
+      limit: Number(limit),
+      page: Number(page),
+      sort: sortBy,
+      depth: 1, // ดึง category มาด้วย
     })
-    if (!models || models.totalDocs === 0) {
-      return Response.json({ success: false, message: 'ไม่พบโมเดลสินค้า' }, { status: 404 })
-    }
+
     return Response.json(
-      { success: true, message: 'ดึงข้อมูลโมเดลสินค้าสำเร็จ', data: models.docs },
+      {
+        success: true,
+        message: 'ดึงข้อมูลโมเดลสินค้าสำเร็จ',
+        data: models.docs,
+        pagination: {
+          total: models.totalDocs,
+          page: models.page,
+          limit: Number(limit),
+          totalPages: models.totalPages,
+          hasNextPage: models.hasNextPage,
+          hasPrevPage: models.hasPrevPage,
+        },
+      },
       { status: 200 },
     )
   } catch (error) {
+    console.error(error)
     return Response.json(
       {
         success: false,

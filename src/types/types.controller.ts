@@ -72,17 +72,40 @@ export const createType = async (req: any) => {
 
 export const getAllTypes = async (req: any) => {
   try {
+    const { page, limit, search, sortBy } = req.query
+
+    const where: any = {}
+
+    if (search) {
+      where.name = { contains: search, mode: 'insensitive' }
+    }
+
     const types = await req.payload.find({
       collection: 'types',
+      where,
+      limit: Number(limit),
+      page: Number(page),
+      sort: sortBy,
     })
-    if (!types || types.totalDocs === 0) {
-      return Response.json({ success: false, message: 'ไม่พบประเภทสินค้า' }, { status: 404 })
-    }
+
     return Response.json(
-      { success: true, message: 'ดึงข้อมูลประเภทสินค้าสำเร็จ', data: types.docs },
+      {
+        success: true,
+        message: 'ดึงข้อมูลประเภทสินค้าสำเร็จ',
+        data: types.docs,
+        pagination: {
+          total: types.totalDocs,
+          page: types.page,
+          limit: Number(limit),
+          totalPages: types.totalPages,
+          hasNextPage: types.hasNextPage,
+          hasPrevPage: types.hasPrevPage,
+        },
+      },
       { status: 200 },
     )
   } catch (error) {
+    console.error(error)
     return Response.json(
       {
         success: false,
