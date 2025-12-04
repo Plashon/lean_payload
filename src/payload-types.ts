@@ -64,6 +64,7 @@ export type SupportedTimezones =
 export interface Config {
   auth: {
     admins: AdminAuthOperations;
+    customers: CustomerAuthOperations;
   };
   blocks: {};
   collections: {
@@ -100,15 +101,37 @@ export interface Config {
   globals: {};
   globalsSelect: {};
   locale: null;
-  user: Admin & {
-    collection: 'admins';
-  };
+  user:
+    | (Admin & {
+        collection: 'admins';
+      })
+    | (Customer & {
+        collection: 'customers';
+      });
   jobs: {
     tasks: unknown;
     workflows: unknown;
   };
 }
 export interface AdminAuthOperations {
+  forgotPassword: {
+    email: string;
+    password: string;
+  };
+  login: {
+    email: string;
+    password: string;
+  };
+  registerFirstUser: {
+    email: string;
+    password: string;
+  };
+  unlock: {
+    email: string;
+    password: string;
+  };
+}
+export interface CustomerAuthOperations {
   forgotPassword: {
     email: string;
     password: string;
@@ -158,6 +181,7 @@ export interface Model {
   id: string;
   modelName: string;
   modelCode: string;
+  type: string | Type;
   updatedAt: string;
   createdAt: string;
 }
@@ -168,8 +192,8 @@ export interface Model {
 export interface Type {
   id: string;
   typeName: string;
-  description?: string | null;
-  model: string | Model;
+  typeCode: string;
+  catagory?: (string | null) | Category;
   updatedAt: string;
   createdAt: string;
 }
@@ -180,7 +204,7 @@ export interface Type {
 export interface Category {
   id: string;
   categoryName: string;
-  cayegoryCode: string;
+  categoryCode: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -194,9 +218,8 @@ export interface Product {
   productCode: string;
   price: number;
   stock: number;
+  status: 'active' | 'inactive';
   model?: (string | null) | Model;
-  type?: (string | null) | Type;
-  categories: (string | Category)[];
   updatedAt: string;
   createdAt: string;
 }
@@ -217,11 +240,25 @@ export interface Variant {
  */
 export interface Customer {
   id: string;
-  email: string;
   name: string;
   phone?: string | null;
   updatedAt: string;
   createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -276,10 +313,15 @@ export interface PayloadLockedDocument {
         value: string | Customer;
       } | null);
   globalSlug?: string | null;
-  user: {
-    relationTo: 'admins';
-    value: string | Admin;
-  };
+  user:
+    | {
+        relationTo: 'admins';
+        value: string | Admin;
+      }
+    | {
+        relationTo: 'customers';
+        value: string | Customer;
+      };
   updatedAt: string;
   createdAt: string;
 }
@@ -289,10 +331,15 @@ export interface PayloadLockedDocument {
  */
 export interface PayloadPreference {
   id: string;
-  user: {
-    relationTo: 'admins';
-    value: string | Admin;
-  };
+  user:
+    | {
+        relationTo: 'admins';
+        value: string | Admin;
+      }
+    | {
+        relationTo: 'customers';
+        value: string | Customer;
+      };
   key?: string | null;
   value?:
     | {
@@ -346,6 +393,7 @@ export interface AdminsSelect<T extends boolean = true> {
 export interface ModelsSelect<T extends boolean = true> {
   modelName?: T;
   modelCode?: T;
+  type?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -355,8 +403,8 @@ export interface ModelsSelect<T extends boolean = true> {
  */
 export interface TypesSelect<T extends boolean = true> {
   typeName?: T;
-  description?: T;
-  model?: T;
+  typeCode?: T;
+  catagory?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -366,7 +414,7 @@ export interface TypesSelect<T extends boolean = true> {
  */
 export interface CategoriesSelect<T extends boolean = true> {
   categoryName?: T;
-  cayegoryCode?: T;
+  categoryCode?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -379,9 +427,8 @@ export interface ProductsSelect<T extends boolean = true> {
   productCode?: T;
   price?: T;
   stock?: T;
+  status?: T;
   model?: T;
-  type?: T;
-  categories?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -400,11 +447,24 @@ export interface VariantsSelect<T extends boolean = true> {
  * via the `definition` "customers_select".
  */
 export interface CustomersSelect<T extends boolean = true> {
-  email?: T;
   name?: T;
   phone?: T;
   updatedAt?: T;
   createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
