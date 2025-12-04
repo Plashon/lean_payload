@@ -14,10 +14,6 @@ export const createMedia = async (req: any) => {
     const alt = formData.get('alt') as string
     const product = formData.get('product') as string
 
-    console.log('File:', file)
-    console.log('Alt:', alt)
-    console.log('Product:', product)
-
     // Validate ด้วย Zod
     const parsed = MediaValidator.CreateMedia.safeParse({
       alt,
@@ -87,7 +83,7 @@ export const createMedia = async (req: any) => {
 
 export const getAllMedia = async (req: any) => {
   try {
-    const { page = 1, limit = 10, search, product } = req.query
+    const { page, limit, search, sortBy, product } = req.query
 
     const where: any = {}
 
@@ -105,7 +101,7 @@ export const getAllMedia = async (req: any) => {
       where,
       limit: Number(limit),
       page: Number(page),
-      sort: '-createdAt',
+      sort: sortBy,
       depth: 1, // ดึงข้อมูล product มาด้วย
     })
 

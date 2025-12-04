@@ -72,7 +72,7 @@ export const createType = async (req: any) => {
 
 export const getAllTypes = async (req: any) => {
   try {
-    const { page = 1, limit = 10, search, sortBy = '-createdAt' } = req.query
+    const { page, limit, search, sortBy } = req.query
 
     const where: any = {}
 

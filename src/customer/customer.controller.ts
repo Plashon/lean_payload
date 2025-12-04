@@ -67,14 +67,7 @@ export const getAllCustomers = async (req: any) => {
       )
     }
 
-    const {
-      page = 1,
-      limit = 10,
-      search,
-      email,
-      phoneNumber,
-      sortBy = '-createdAt', // เรียงลำดับ: createdAt, email, name
-    } = req.query
+    const { page, limit, search, email, phoneNumber, sortBy } = req.query
 
     const where: any = {}
 
