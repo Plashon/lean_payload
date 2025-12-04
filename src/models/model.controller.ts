@@ -1,12 +1,7 @@
-import { success } from 'zod'
 import { CreateModelValidator, UpdateModelValidator } from './model.validator'
 
 export const createModel = async (req: any) => {
-  console.log('test01')
-
   try {
-    console.log('test02')
-
     if (req.user?.collection !== 'admins') {
       return Response.json(
         { success: false, message: 'ไม่สามารถสร้างโมเดลสินค้าได้ - ไม่มีสิทธิ์' },
