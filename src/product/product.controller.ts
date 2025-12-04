@@ -109,6 +109,7 @@ export const getAllProducts = async (req: any) => {
       page = 1, // หน้าเริ่มต้น
       limit = 10, // จำนวนต่อหน้า
       search, // ค้นหาจากชื่อหรือรหัสสินค้า
+      sortBy,
       status, // กรองตามสถานะ เช่น "active" หรือ "inactive"
       model, // กรองตาม model ID
     } = req.query
@@ -144,7 +145,7 @@ export const getAllProducts = async (req: any) => {
       where,
       limit: Number(limit),
       page: Number(page),
-      sort: '-createdAt',
+      sort: sortBy,
     })
 
     if (!products || products.totalDocs === 0) {

@@ -71,11 +71,11 @@ export const createModel = async (req: any) => {
 export const getAllModels = async (req: any) => {
   try {
     const {
-      page = 1,
-      limit = 10,
+      page,
+      limit,
       search,
       category, // filter by category
-      sortBy = '-createdAt',
+      sortBy,
     } = req.query
 
     const where: any = {}

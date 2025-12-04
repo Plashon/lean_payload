@@ -58,13 +58,7 @@ export const createCategory = async (req: any) => {
 
 export const getAllCategories = async (req: any) => {
   try {
-    const {
-      page = 1,
-      limit = 10,
-      search,
-      type, // filter by type
-      sortBy = '-createdAt',
-    } = req.query
+    const { page, limit, search, type, sortBy } = req.query
 
     const where: any = {}
 
