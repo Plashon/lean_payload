@@ -16,9 +16,8 @@ import { Types } from './collections/Type'
 import { Variants } from './collections/Variant'
 import { GlobalMedias } from './collections/GlobalMedia'
 
-import { Banner } from '@/global/Banner'
 import { Footer } from '@/global/Footer'
-import { ContentSections } from './global/ContentSections'
+import { Home } from './global/Home'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -30,7 +29,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  globals: [Banner, Footer, ContentSections],
+  globals: [Footer, Home],
   collections: [
     Admins,
     Models,

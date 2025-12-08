@@ -1,8 +1,8 @@
 import { GlobalConfig } from 'payload'
 import { admin } from '@/access/admin'
 
-export const ContentSections: GlobalConfig = {
-  slug: 'content-sections',
+export const Home: GlobalConfig = {
+  slug: 'Home',
   access: {
     read: () => true,
     update: admin,
@@ -11,6 +11,60 @@ export const ContentSections: GlobalConfig = {
     group: 'CMS',
   },
   fields: [
+    {
+      name: 'slides',
+      type: 'array',
+      label: 'Banner Slides',
+      minRows: 1,
+      maxRows: 3,
+      fields: [
+        {
+          name: 'backgroundImage',
+          type: 'upload',
+          relationTo: 'global-medias',
+          required: true,
+          label: 'Background Image',
+        },
+        {
+          name: 'heading',
+          type: 'text',
+          required: true,
+          label: 'Main Heading',
+        },
+        {
+          name: 'description',
+          type: 'textarea',
+          label: 'Description Text',
+        },
+        {
+          name: 'ctaButton',
+          type: 'group',
+          label: 'Call to Action Button',
+          fields: [
+            {
+              name: 'text',
+              type: 'text',
+              label: 'Button Text',
+              defaultValue: 'View More',
+            },
+            {
+              name: 'link',
+              type: 'text',
+              label: 'Button Link',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'autoPlaySpeed',
+      type: 'number',
+      label: 'Auto Play Speed (seconds)',
+      defaultValue: 5,
+      admin: {
+        description: 'Time between slide transitions',
+      },
+    },
     {
       name: 'sections',
       type: 'array',
@@ -24,8 +78,8 @@ export const ContentSections: GlobalConfig = {
           options: [
             { label: 'Horizontal - Text Left', value: 'horizontal-text-left' },
             { label: 'Horizontal - Text Right', value: 'horizontal-text-right' },
-            { label: 'Vertical - Text Left', value: 'vertical-text-left' },
-            { label: 'Vertical - Text Right', value: 'vertical-text-right' },
+            { label: 'Vertical - Text Top', value: 'vertical-text-top' },
+            { label: 'Vertical - Text Bottom', value: 'vertical-text-bottom' },
           ],
           defaultValue: 'horizontal-text-left',
         },

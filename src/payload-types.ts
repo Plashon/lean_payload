@@ -103,14 +103,12 @@ export interface Config {
   };
   fallbackLocale: null;
   globals: {
-    banner: Banner;
     footer: Footer;
-    'content-sections': ContentSection;
+    Home: Home;
   };
   globalsSelect: {
-    banner: BannerSelect<false> | BannerSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
-    'content-sections': ContentSectionsSelect<false> | ContentSectionsSelect<true>;
+    Home: HomeSelect<false> | HomeSelect<true>;
   };
   locale: null;
   user:
@@ -686,31 +684,6 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "banner".
- */
-export interface Banner {
-  id: string;
-  slides?:
-    | {
-        backgroundImage: string | GlobalMedia;
-        heading: string;
-        description?: string | null;
-        ctaButton?: {
-          text?: string | null;
-          link?: string | null;
-        };
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Time between slide transitions
-   */
-  autoPlaySpeed?: number | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "footer".
  */
 export interface Footer {
@@ -754,13 +727,29 @@ export interface Footer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "content-sections".
+ * via the `definition` "Home".
  */
-export interface ContentSection {
+export interface Home {
   id: string;
+  slides?:
+    | {
+        backgroundImage: string | GlobalMedia;
+        heading: string;
+        description?: string | null;
+        ctaButton?: {
+          text?: string | null;
+          link?: string | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Time between slide transitions
+   */
+  autoPlaySpeed?: number | null;
   sections?:
     | {
-        layout: 'horizontal-text-left' | 'horizontal-text-right' | 'vertical-text-left' | 'vertical-text-right';
+        layout: 'horizontal-text-left' | 'horizontal-text-right' | 'vertical-text-top' | 'vertical-text-bottom';
         heading: string;
         description: string;
         image: string | GlobalMedia;
@@ -778,30 +767,6 @@ export interface ContentSection {
     | null;
   updatedAt?: string | null;
   createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "banner_select".
- */
-export interface BannerSelect<T extends boolean = true> {
-  slides?:
-    | T
-    | {
-        backgroundImage?: T;
-        heading?: T;
-        description?: T;
-        ctaButton?:
-          | T
-          | {
-              text?: T;
-              link?: T;
-            };
-        id?: T;
-      };
-  autoPlaySpeed?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -852,9 +817,24 @@ export interface FooterSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "content-sections_select".
+ * via the `definition` "Home_select".
  */
-export interface ContentSectionsSelect<T extends boolean = true> {
+export interface HomeSelect<T extends boolean = true> {
+  slides?:
+    | T
+    | {
+        backgroundImage?: T;
+        heading?: T;
+        description?: T;
+        ctaButton?:
+          | T
+          | {
+              text?: T;
+              link?: T;
+            };
+        id?: T;
+      };
+  autoPlaySpeed?: T;
   sections?:
     | T
     | {
