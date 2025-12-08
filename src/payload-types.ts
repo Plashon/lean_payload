@@ -747,9 +747,20 @@ export interface Home {
    * Time between slide transitions
    */
   autoPlaySpeed?: number | null;
+  'product-showcase': {
+    heading: string;
+    description: string;
+    products?:
+      | {
+          image: string | GlobalMedia;
+          title: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
   sections?:
     | {
-        layout: 'horizontal-text-left' | 'horizontal-text-right' | 'vertical-text-top' | 'vertical-text-bottom';
+        layout: 'horizontal-text-left' | 'horizontal-text-right';
         heading: string;
         description: string;
         image: string | GlobalMedia;
@@ -760,11 +771,38 @@ export interface Home {
         };
         styling?: {
           textAreaBg?: ('white' | 'light-beige' | 'light-gray' | 'light-blue') | null;
-          imageAreaBg?: ('white' | 'light-yellow' | 'light-blue' | 'light-green' | 'light-cyan') | null;
         };
         id?: string | null;
       }[]
     | null;
+  'business-overview': {
+    heading: string;
+    image: string | GlobalMedia;
+    button?: {
+      text?: string | null;
+      url?: string | null;
+    };
+  };
+  'product-overview': {
+    heading: string;
+    image: string | GlobalMedia;
+    features?:
+      | {
+          icon: string | GlobalMedia;
+          title: string;
+          description: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  'brand-intro': {
+    image: string | GlobalMedia;
+    text: string;
+    button: {
+      label: string;
+      url: string;
+    };
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -835,6 +873,19 @@ export interface HomeSelect<T extends boolean = true> {
         id?: T;
       };
   autoPlaySpeed?: T;
+  'product-showcase'?:
+    | T
+    | {
+        heading?: T;
+        description?: T;
+        products?:
+          | T
+          | {
+              image?: T;
+              title?: T;
+              id?: T;
+            };
+      };
   sections?:
     | T
     | {
@@ -853,9 +904,46 @@ export interface HomeSelect<T extends boolean = true> {
           | T
           | {
               textAreaBg?: T;
-              imageAreaBg?: T;
             };
         id?: T;
+      };
+  'business-overview'?:
+    | T
+    | {
+        heading?: T;
+        image?: T;
+        button?:
+          | T
+          | {
+              text?: T;
+              url?: T;
+            };
+      };
+  'product-overview'?:
+    | T
+    | {
+        heading?: T;
+        image?: T;
+        features?:
+          | T
+          | {
+              icon?: T;
+              title?: T;
+              description?: T;
+              id?: T;
+            };
+      };
+  'brand-intro'?:
+    | T
+    | {
+        image?: T;
+        text?: T;
+        button?:
+          | T
+          | {
+              label?: T;
+              url?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;

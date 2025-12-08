@@ -66,9 +66,53 @@ export const Home: GlobalConfig = {
       },
     },
     {
+      name: 'product-showcase',
+      type: 'group',
+      label: 'Product Showcase',
+      fields: [
+        {
+          name: 'heading',
+          type: 'text',
+          label: 'Main Heading',
+          required: true,
+          defaultValue: 'HARNESSING THE WIND OF CHANGE',
+        },
+        {
+          name: 'description',
+          type: 'textarea',
+          label: 'Description',
+          required: true,
+        },
+        {
+          name: 'products',
+          type: 'array',
+          label: 'Product Cards',
+          minRows: 1,
+          maxRows: 2,
+          fields: [
+            {
+              name: 'image',
+              type: 'upload',
+              relationTo: 'global-medias',
+              required: true,
+              label: 'Product Image',
+            },
+            {
+              name: 'title',
+              type: 'text',
+              label: 'Product Title',
+              required: true,
+            },
+          ],
+        },
+      ],
+    },
+    {
       name: 'sections',
       type: 'array',
       label: 'Content Sections',
+      minRows: 1,
+      maxRows: 2,
       fields: [
         {
           name: 'layout',
@@ -78,8 +122,6 @@ export const Home: GlobalConfig = {
           options: [
             { label: 'Horizontal - Text Left', value: 'horizontal-text-left' },
             { label: 'Horizontal - Text Right', value: 'horizontal-text-right' },
-            { label: 'Vertical - Text Top', value: 'vertical-text-top' },
-            { label: 'Vertical - Text Bottom', value: 'vertical-text-bottom' },
           ],
           defaultValue: 'horizontal-text-left',
         },
@@ -100,7 +142,7 @@ export const Home: GlobalConfig = {
           type: 'upload',
           relationTo: 'global-medias',
           required: true,
-          label: 'Section Image',
+          label: 'Background Image',
         },
         {
           name: 'ctaButton',
@@ -149,18 +191,127 @@ export const Home: GlobalConfig = {
               ],
               defaultValue: 'white',
             },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'business-overview',
+      type: 'group',
+      label: 'Business Overview',
+      fields: [
+        {
+          name: 'heading',
+          type: 'text',
+          label: 'Heading',
+          required: true,
+        },
+        {
+          name: 'image',
+          type: 'upload',
+          relationTo: 'global-medias',
+          required: true,
+        },
+        {
+          name: 'button',
+          type: 'group',
+          label: 'Button',
+          fields: [
             {
-              name: 'imageAreaBg',
-              type: 'select',
-              label: 'Image Area Background',
-              options: [
-                { label: 'White', value: 'white' },
-                { label: 'Light Yellow', value: 'light-yellow' },
-                { label: 'Light Blue', value: 'light-blue' },
-                { label: 'Light Green', value: 'light-green' },
-                { label: 'Light Cyan', value: 'light-cyan' },
-              ],
-              defaultValue: 'light-yellow',
+              name: 'text',
+              type: 'text',
+              label: 'Button Text',
+            },
+            {
+              name: 'url',
+              type: 'text',
+              label: 'Button URL',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'product-overview',
+      type: 'group',
+      label: 'Product Overview',
+      fields: [
+        {
+          name: 'heading',
+          type: 'text',
+          label: 'Heading',
+          required: true,
+        },
+        {
+          name: 'image',
+          type: 'upload',
+          label: 'Image',
+          relationTo: 'global-medias',
+          required: true,
+        },
+        {
+          name: 'features',
+          type: 'array',
+          label: 'Features',
+          minRows: 3,
+          fields: [
+            {
+              name: 'icon',
+              type: 'upload',
+              label: 'Icon',
+              relationTo: 'global-medias',
+              required: true,
+            },
+            {
+              name: 'title',
+              type: 'text',
+              label: 'Title',
+              required: true,
+            },
+            {
+              name: 'description',
+              type: 'textarea',
+              label: 'Description',
+              required: true,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'brand-intro',
+      type: 'group',
+      label: 'Brand Introduction',
+      fields: [
+        {
+          name: 'image',
+          type: 'upload',
+          label: 'Image',
+          relationTo: 'global-medias',
+          required: true,
+        },
+        {
+          name: 'text',
+          type: 'textarea',
+          label: 'Text',
+          required: true,
+        },
+        {
+          name: 'button',
+          type: 'group',
+          label: 'Button',
+          fields: [
+            {
+              name: 'label',
+              type: 'text',
+              label: 'Button Label',
+              required: true,
+            },
+            {
+              name: 'url',
+              type: 'text',
+              label: 'Button URL',
+              required: true,
             },
           ],
         },
