@@ -1,7 +1,7 @@
 import { GlobalConfig } from 'payload'
 import { admin } from '@/access/admin'
 
-export const AboutUs: GlobalConfig = {
+export const CMS_AboutUs: GlobalConfig = {
   slug: 'AboutUs',
   access: {
     read: () => true,
@@ -32,17 +32,17 @@ export const AboutUs: GlobalConfig = {
       ],
     },
     {
+      name: 'heading',
+      type: 'text',
+      required: true,
+      label: 'heading',
+      defaultValue: 'OUR HISTORY',
+    },
+    {
       name: 'ourHistory',
-      type: 'group',
+      type: 'array',
       label: 'Our history',
       fields: [
-        {
-          name: 'heading',
-          type: 'text',
-          required: true,
-          label: 'heading',
-          defaultValue: 'OUR HISTORY',
-        },
         {
           name: 'historyImage',
           type: 'upload',

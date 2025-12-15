@@ -1,7 +1,7 @@
 import { GlobalConfig } from 'payload'
 import { admin } from '@/access/admin'
 
-export const WarrantyServices: GlobalConfig = {
+export const CMS_WarrantyServices: GlobalConfig = {
   slug: 'WarrantyServices',
   access: {
     read: () => true,
