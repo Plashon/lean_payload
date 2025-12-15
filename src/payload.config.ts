@@ -18,6 +18,10 @@ import { GlobalMedias } from './collections/GlobalMedia'
 
 import { Footer } from '@/global/Footer'
 import { Home } from './global/Home'
+import { WarrantyServices } from './global/Warranty&Services'
+import { AboutUs } from './global/AboutUs'
+import { TermsConditions } from './global/Terms&Conditions'
+import { PrivacyPolicy } from './global/PrivacyPolicy'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -29,7 +33,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  globals: [Footer, Home],
+  globals: [Footer, Home, WarrantyServices, AboutUs, TermsConditions, PrivacyPolicy],
   collections: [
     Admins,
     Models,
