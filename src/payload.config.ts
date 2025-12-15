@@ -14,6 +14,10 @@ import { Models } from './collections/Model'
 import { Products } from './collections/Product'
 import { Types } from './collections/Type'
 import { Variants } from './collections/Variant'
+import { GlobalMedias } from './collections/GlobalMedia'
+
+import { Footer } from '@/global/Footer'
+import { Home } from './global/Home'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -25,7 +29,18 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Admins, Models, Types, Categories, Products, Variants, Customers, Medias],
+  globals: [Footer, Home],
+  collections: [
+    Admins,
+    Models,
+    Types,
+    Categories,
+    Products,
+    Variants,
+    Customers,
+    Medias,
+    GlobalMedias,
+  ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
