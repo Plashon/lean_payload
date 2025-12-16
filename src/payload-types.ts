@@ -891,12 +891,15 @@ export interface AboutUs {
     backgroundImage: string | GlobalMedia;
     heading: string;
   };
-  ourHistory: {
-    heading: string;
-    historyImage: string | GlobalMedia;
-    herder: string;
-    description: string;
-  };
+  heading: string;
+  ourHistory?:
+    | {
+        historyImage: string | GlobalMedia;
+        herder: string;
+        description: string;
+        id?: string | null;
+      }[]
+    | null;
   'company-overview': {
     heading: string;
     'sub-heading': string;
@@ -985,18 +988,7 @@ export interface TermsCondition {
   id: string;
   'terms-and-conditions': {
     title: string;
-    introduction: string;
-    'quick-navigation'?:
-      | {
-          text: string;
-          url: string;
-          id?: string | null;
-        }[]
-      | null;
-  };
-  content: {
-    header: string;
-    title: {
+    introduction: {
       root: {
         type: string;
         children: {
@@ -1023,18 +1015,7 @@ export interface PrivacyPolicy {
   id: string;
   'privacy-policy': {
     title: string;
-    introduction: string;
-    'quick-navigation'?:
-      | {
-          text: string;
-          url: string;
-          id?: string | null;
-        }[]
-      | null;
-  };
-  content: {
-    header: string;
-    title: {
+    introduction: {
       root: {
         type: string;
         children: {
@@ -1296,13 +1277,14 @@ export interface AboutUsSelect<T extends boolean = true> {
         backgroundImage?: T;
         heading?: T;
       };
+  heading?: T;
   ourHistory?:
     | T
     | {
-        heading?: T;
         historyImage?: T;
         herder?: T;
         description?: T;
+        id?: T;
       };
   'company-overview'?:
     | T
@@ -1361,19 +1343,6 @@ export interface TermsConditionsSelect<T extends boolean = true> {
     | {
         title?: T;
         introduction?: T;
-        'quick-navigation'?:
-          | T
-          | {
-              text?: T;
-              url?: T;
-              id?: T;
-            };
-      };
-  content?:
-    | T
-    | {
-        header?: T;
-        title?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -1389,19 +1358,6 @@ export interface PrivacyPolicySelect<T extends boolean = true> {
     | {
         title?: T;
         introduction?: T;
-        'quick-navigation'?:
-          | T
-          | {
-              text?: T;
-              url?: T;
-              id?: T;
-            };
-      };
-  content?:
-    | T
-    | {
-        header?: T;
-        title?: T;
       };
   updatedAt?: T;
   createdAt?: T;
