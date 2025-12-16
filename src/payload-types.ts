@@ -77,6 +77,7 @@ export interface Config {
     customers: Customer;
     media: Media;
     'global-medias': GlobalMedia;
+    blog: Blog;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -93,6 +94,7 @@ export interface Config {
     customers: CustomersSelect<false> | CustomersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     'global-medias': GlobalMediasSelect<false> | GlobalMediasSelect<true>;
+    blog: BlogSelect<false> | BlogSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -109,6 +111,8 @@ export interface Config {
     AboutUs: AboutUs;
     TermsConditions: TermsCondition;
     PrivacyPolicy: PrivacyPolicy;
+    ContactUs: ContactUs;
+    Blog: Blog1;
   };
   globalsSelect: {
     footer: FooterSelect<false> | FooterSelect<true>;
@@ -117,6 +121,8 @@ export interface Config {
     AboutUs: AboutUsSelect<false> | AboutUsSelect<true>;
     TermsConditions: TermsConditionsSelect<false> | TermsConditionsSelect<true>;
     PrivacyPolicy: PrivacyPolicySelect<false> | PrivacyPolicySelect<true>;
+    ContactUs: ContactUsSelect<false> | ContactUsSelect<true>;
+    Blog: BlogSelect1<false> | BlogSelect1<true>;
   };
   locale: null;
   user:
@@ -355,6 +361,32 @@ export interface GlobalMedia {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog".
+ */
+export interface Blog {
+  id: string;
+  blog: string;
+  summary: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  type: 'our-blog' | 'external-resources';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -412,6 +444,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'global-medias';
         value: string | GlobalMedia;
+      } | null)
+    | ({
+        relationTo: 'blog';
+        value: string | Blog;
       } | null);
   globalSlug?: string | null;
   user:
@@ -649,6 +685,17 @@ export interface GlobalMediasSelect<T extends boolean = true> {
               filename?: T;
             };
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog_select".
+ */
+export interface BlogSelect<T extends boolean = true> {
+  blog?: T;
+  summary?: T;
+  type?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -891,12 +938,15 @@ export interface AboutUs {
     backgroundImage: string | GlobalMedia;
     heading: string;
   };
-  ourHistory: {
-    heading: string;
-    historyImage: string | GlobalMedia;
-    herder: string;
-    description: string;
-  };
+  heading: string;
+  ourHistory?:
+    | {
+        historyImage: string | GlobalMedia;
+        herder: string;
+        description: string;
+        id?: string | null;
+      }[]
+    | null;
   'company-overview': {
     heading: string;
     'sub-heading': string;
@@ -985,18 +1035,7 @@ export interface TermsCondition {
   id: string;
   'terms-and-conditions': {
     title: string;
-    introduction: string;
-    'quick-navigation'?:
-      | {
-          text: string;
-          url: string;
-          id?: string | null;
-        }[]
-      | null;
-  };
-  content: {
-    header: string;
-    title: {
+    introduction: {
       root: {
         type: string;
         children: {
@@ -1023,17 +1062,49 @@ export interface PrivacyPolicy {
   id: string;
   'privacy-policy': {
     title: string;
-    introduction: string;
-    'quick-navigation'?:
-      | {
-          text: string;
-          url: string;
-          id?: string | null;
-        }[]
-      | null;
+    introduction: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
   };
-  content: {
-    header: string;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContactUs".
+ */
+export interface ContactUs {
+  id: string;
+  banner: {
+    backgroundImage: string | GlobalMedia;
+    heading: string;
+  };
+  'main-title': {
+    title: string;
+    description: string;
+  };
+  locations?:
+    | {
+        location: string;
+        'operating-hours': string;
+        'telephone-number': string;
+        'fax-number': string;
+        id?: string | null;
+      }[]
+    | null;
+  'get-in-touch': {
     title: {
       root: {
         type: string;
@@ -1049,6 +1120,22 @@ export interface PrivacyPolicy {
       };
       [k: string]: unknown;
     };
+    'background-image': string | GlobalMedia;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Blog".
+ */
+export interface Blog1 {
+  id: string;
+  featuredBlog: {
+    /**
+     * Select a blog post to feature at the top
+     */
+    blog: string | Blog;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -1296,13 +1383,14 @@ export interface AboutUsSelect<T extends boolean = true> {
         backgroundImage?: T;
         heading?: T;
       };
+  heading?: T;
   ourHistory?:
     | T
     | {
-        heading?: T;
         historyImage?: T;
         herder?: T;
         description?: T;
+        id?: T;
       };
   'company-overview'?:
     | T
@@ -1361,19 +1449,6 @@ export interface TermsConditionsSelect<T extends boolean = true> {
     | {
         title?: T;
         introduction?: T;
-        'quick-navigation'?:
-          | T
-          | {
-              text?: T;
-              url?: T;
-              id?: T;
-            };
-      };
-  content?:
-    | T
-    | {
-        header?: T;
-        title?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -1389,19 +1464,56 @@ export interface PrivacyPolicySelect<T extends boolean = true> {
     | {
         title?: T;
         introduction?: T;
-        'quick-navigation'?:
-          | T
-          | {
-              text?: T;
-              url?: T;
-              id?: T;
-            };
       };
-  content?:
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContactUs_select".
+ */
+export interface ContactUsSelect<T extends boolean = true> {
+  banner?:
     | T
     | {
-        header?: T;
+        backgroundImage?: T;
+        heading?: T;
+      };
+  'main-title'?:
+    | T
+    | {
         title?: T;
+        description?: T;
+      };
+  locations?:
+    | T
+    | {
+        location?: T;
+        'operating-hours'?: T;
+        'telephone-number'?: T;
+        'fax-number'?: T;
+        id?: T;
+      };
+  'get-in-touch'?:
+    | T
+    | {
+        title?: T;
+        'background-image'?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Blog_select".
+ */
+export interface BlogSelect1<T extends boolean = true> {
+  featuredBlog?:
+    | T
+    | {
+        blog?: T;
       };
   updatedAt?: T;
   createdAt?: T;

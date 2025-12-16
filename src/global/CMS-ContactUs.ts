@@ -1,5 +1,6 @@
 import { GlobalConfig } from 'payload'
 import { admin } from '@/access/admin'
+import { lexicalEditor, FixedToolbarFeature } from '@payloadcms/richtext-lexical'
 
 export const CMS_ContactUs: GlobalConfig = {
   slug: 'ContactUs',
@@ -93,7 +94,15 @@ export const CMS_ContactUs: GlobalConfig = {
       type: 'group',
       label: 'Get In Touch',
       fields: [
-        { name: 'title', type: 'richText', label: 'title', required: true },
+        {
+          name: 'title',
+          type: 'richText',
+          label: 'title',
+          required: true,
+          editor: lexicalEditor({
+            features: ({ defaultFeatures }) => [FixedToolbarFeature(), ...defaultFeatures],
+          }),
+        },
         {
           name: 'background-image',
           type: 'upload',
