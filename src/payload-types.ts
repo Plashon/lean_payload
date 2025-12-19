@@ -77,6 +77,7 @@ export interface Config {
     customers: Customer;
     media: Media;
     'global-medias': GlobalMedia;
+    'contact-requests': ContactRequest;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -93,6 +94,7 @@ export interface Config {
     customers: CustomersSelect<false> | CustomersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     'global-medias': GlobalMediasSelect<false> | GlobalMediasSelect<true>;
+    'contact-requests': ContactRequestsSelect<false> | ContactRequestsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -355,6 +357,21 @@ export interface GlobalMedia {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-requests".
+ */
+export interface ContactRequest {
+  id: string;
+  fullName: string;
+  email: string;
+  company: string;
+  jobTitle: string;
+  interestedProducts: (string | Category)[];
+  message?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -412,6 +429,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'global-medias';
         value: string | GlobalMedia;
+      } | null)
+    | ({
+        relationTo: 'contact-requests';
+        value: string | ContactRequest;
       } | null);
   globalSlug?: string | null;
   user:
@@ -649,6 +670,20 @@ export interface GlobalMediasSelect<T extends boolean = true> {
               filename?: T;
             };
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-requests_select".
+ */
+export interface ContactRequestsSelect<T extends boolean = true> {
+  fullName?: T;
+  email?: T;
+  company?: T;
+  jobTitle?: T;
+  interestedProducts?: T;
+  message?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

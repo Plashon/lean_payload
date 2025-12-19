@@ -22,6 +22,8 @@ import { CMS_WarrantyServices } from './global/CMS-Warranty&Services'
 import { CMS_AboutUs } from './global/CMS-AboutUs'
 import { CMS_TermsConditions } from './global/CMS-Terms&Conditions'
 import { CMS_PrivacyPolicy } from './global/CMS-PrivacyPolicy'
+import { C } from 'vitest/dist/chunks/reporters.d.DL9pg5DB.js'
+import { ContactRequests } from './collections/ContactRequests'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -51,6 +53,7 @@ export default buildConfig({
     Customers,
     Medias,
     GlobalMedias,
+    ContactRequests,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
