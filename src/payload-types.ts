@@ -112,7 +112,7 @@ export interface Config {
     TermsConditions: TermsCondition;
     PrivacyPolicy: PrivacyPolicy;
     ContactUs: ContactUs;
-    Blog: Blog1;
+    'cms-blog': CmsBlog;
   };
   globalsSelect: {
     footer: FooterSelect<false> | FooterSelect<true>;
@@ -122,7 +122,7 @@ export interface Config {
     TermsConditions: TermsConditionsSelect<false> | TermsConditionsSelect<true>;
     PrivacyPolicy: PrivacyPolicySelect<false> | PrivacyPolicySelect<true>;
     ContactUs: ContactUsSelect<false> | ContactUsSelect<true>;
-    Blog: BlogSelect1<false> | BlogSelect1<true>;
+    'cms-blog': CmsBlogSelect<false> | CmsBlogSelect<true>;
   };
   locale: null;
   user:
@@ -365,7 +365,7 @@ export interface GlobalMedia {
  */
 export interface Blog {
   id: string;
-  blog: string;
+  title: string;
   summary: {
     root: {
       type: string;
@@ -691,7 +691,7 @@ export interface GlobalMediasSelect<T extends boolean = true> {
  * via the `definition` "blog_select".
  */
 export interface BlogSelect<T extends boolean = true> {
-  blog?: T;
+  title?: T;
   summary?: T;
   type?: T;
   updatedAt?: T;
@@ -1127,16 +1127,14 @@ export interface ContactUs {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "Blog".
+ * via the `definition` "cms-blog".
  */
-export interface Blog1 {
+export interface CmsBlog {
   id: string;
-  featuredBlog: {
-    /**
-     * Select a blog post to feature at the top
-     */
-    blog: string | Blog;
-  };
+  /**
+   * Select a blog post to feature at the top
+   */
+  blog: string | Blog;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1507,14 +1505,10 @@ export interface ContactUsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "Blog_select".
+ * via the `definition` "cms-blog_select".
  */
-export interface BlogSelect1<T extends boolean = true> {
-  featuredBlog?:
-    | T
-    | {
-        blog?: T;
-      };
+export interface CmsBlogSelect<T extends boolean = true> {
+  blog?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

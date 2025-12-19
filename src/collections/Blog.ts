@@ -12,7 +12,7 @@ import {
 export const Blog: CollectionConfig = {
   slug: 'blog',
   admin: {
-    useAsTitle: 'blog',
+    useAsTitle: 'title',
   },
   access: {
     read: () => true,
@@ -23,7 +23,7 @@ export const Blog: CollectionConfig = {
   timestamps: true,
   fields: [
     {
-      name: 'blog',
+      name: 'title',
       type: 'text',
       defaultValue: 'Blog name',
       required: true,
@@ -48,27 +48,27 @@ export const Blog: CollectionConfig = {
   ],
   endpoints: [
     {
-      path: '/',
+      path: '/create',
       method: 'post',
       handler: createBlog,
     },
     {
-      path: '/',
+      path: '/get-all',
       method: 'get',
       handler: getAllBlogs,
     },
     {
-      path: '/:id',
+      path: '/get/:id',
       method: 'get',
       handler: getBlogById,
     },
     {
-      path: '/:id',
+      path: 'update/:id',
       method: 'put',
       handler: updateBlog,
     },
     {
-      path: '/:id',
+      path: 'delete/:id',
       method: 'delete',
       handler: deleteBlog,
     },
