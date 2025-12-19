@@ -1,6 +1,10 @@
 import type { CollectionConfig } from 'payload'
 import { admin } from '@/access/admin'
-
+import {
+  submitContactRequest,
+  getContactRequests,
+  getContactRequestById,
+} from './../contrectRequest/contect.controller'
 export const ContactRequests: CollectionConfig = {
   slug: 'contact-requests',
   access: {
@@ -53,5 +57,21 @@ export const ContactRequests: CollectionConfig = {
       label: 'Message (optional)',
     },
   ],
-  endpoints: [],
+  endpoints: [
+    {
+      path: '/submit',
+      method: 'post',
+      handler: submitContactRequest,
+    },
+    {
+      path: '/:id',
+      method: 'get',
+      handler: getContactRequestById,
+    },
+    {
+      path: '/',
+      method: 'get',
+      handler: getContactRequests,
+    },
+  ],
 }
