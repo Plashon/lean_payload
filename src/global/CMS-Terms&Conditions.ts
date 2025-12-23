@@ -1,5 +1,6 @@
 import { GlobalConfig } from 'payload'
 import { admin } from '@/access/admin'
+import { lexicalEditor, FixedToolbarFeature } from '@payloadcms/richtext-lexical'
 
 export const CMS_TermsConditions: GlobalConfig = {
   slug: 'TermsConditions',
@@ -28,6 +29,9 @@ export const CMS_TermsConditions: GlobalConfig = {
           type: 'richText',
           label: 'Introduction',
           required: true,
+          editor: lexicalEditor({
+            features: ({ defaultFeatures }) => [FixedToolbarFeature(), ...defaultFeatures],
+          }),
         },
       ],
     },

@@ -1,5 +1,6 @@
 import { GlobalConfig } from 'payload'
 import { admin } from '@/access/admin'
+import { lexicalEditor, FixedToolbarFeature } from '@payloadcms/richtext-lexical'
 
 export const CMS_AboutUs: GlobalConfig = {
   slug: 'AboutUs',
@@ -115,6 +116,9 @@ export const CMS_AboutUs: GlobalConfig = {
           type: 'richText',
           label: 'Our Story',
           required: true,
+          editor: lexicalEditor({
+            features: ({ defaultFeatures }) => [FixedToolbarFeature(), ...defaultFeatures],
+          }),
         },
         {
           name: 'ender-image',
@@ -147,6 +151,9 @@ export const CMS_AboutUs: GlobalConfig = {
           name: 'description',
           type: 'richText',
           required: true,
+          editor: lexicalEditor({
+            features: ({ defaultFeatures }) => [FixedToolbarFeature(), ...defaultFeatures],
+          }),
           label: 'Description',
         },
       ],
@@ -187,6 +194,9 @@ export const CMS_AboutUs: GlobalConfig = {
           name: 'description',
           type: 'richText',
           required: true,
+          editor: lexicalEditor({
+            features: ({ defaultFeatures }) => [FixedToolbarFeature(), ...defaultFeatures],
+          }),
           label: 'Description',
         },
         {
