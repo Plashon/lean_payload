@@ -111,6 +111,8 @@ export interface Config {
     AboutUs: AboutUs;
     TermsConditions: TermsCondition;
     PrivacyPolicy: PrivacyPolicy;
+    ContactUs: ContactUs;
+    'cms-blog': CmsBlog;
   };
   globalsSelect: {
     footer: FooterSelect<false> | FooterSelect<true>;
@@ -119,6 +121,8 @@ export interface Config {
     AboutUs: AboutUsSelect<false> | AboutUsSelect<true>;
     TermsConditions: TermsConditionsSelect<false> | TermsConditionsSelect<true>;
     PrivacyPolicy: PrivacyPolicySelect<false> | PrivacyPolicySelect<true>;
+    ContactUs: ContactUsSelect<false> | ContactUsSelect<true>;
+    'cms-blog': CmsBlogSelect<false> | CmsBlogSelect<true>;
   };
   locale: null;
   user:
@@ -1065,7 +1069,21 @@ export interface PrivacyPolicy {
       };
       [k: string]: unknown;
     };
+    'background-image': string | GlobalMedia;
   };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cms-blog".
+ */
+export interface CmsBlog {
+  id: string;
+  /**
+   * Select a blog post to feature at the top
+   */
+  blog: string | Blog;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1394,6 +1412,16 @@ export interface PrivacyPolicySelect<T extends boolean = true> {
         title?: T;
         introduction?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cms-blog_select".
+ */
+export interface CmsBlogSelect<T extends boolean = true> {
+  blog?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
