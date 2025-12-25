@@ -77,7 +77,7 @@ export interface Config {
     customers: Customer;
     media: Media;
     'global-medias': GlobalMedia;
-    blog: Blog;
+    'contact-requests': ContactRequest;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -94,7 +94,7 @@ export interface Config {
     customers: CustomersSelect<false> | CustomersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     'global-medias': GlobalMediasSelect<false> | GlobalMediasSelect<true>;
-    blog: BlogSelect<false> | BlogSelect<true>;
+    'contact-requests': ContactRequestsSelect<false> | ContactRequestsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -361,27 +361,16 @@ export interface GlobalMedia {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "blog".
+ * via the `definition` "contact-requests".
  */
-export interface Blog {
+export interface ContactRequest {
   id: string;
-  title: string;
-  summary: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  type: 'our-blog' | 'external-resources';
+  fullName: string;
+  email: string;
+  company: string;
+  jobTitle: string;
+  interestedProducts: (string | Category)[];
+  message?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -446,8 +435,8 @@ export interface PayloadLockedDocument {
         value: string | GlobalMedia;
       } | null)
     | ({
-        relationTo: 'blog';
-        value: string | Blog;
+        relationTo: 'contact-requests';
+        value: string | ContactRequest;
       } | null);
   globalSlug?: string | null;
   user:
@@ -688,12 +677,15 @@ export interface GlobalMediasSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "blog_select".
+ * via the `definition` "contact-requests_select".
  */
-export interface BlogSelect<T extends boolean = true> {
-  title?: T;
-  summary?: T;
-  type?: T;
+export interface ContactRequestsSelect<T extends boolean = true> {
+  fullName?: T;
+  email?: T;
+  company?: T;
+  jobTitle?: T;
+  interestedProducts?: T;
+  message?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1077,49 +1069,6 @@ export interface PrivacyPolicy {
       };
       [k: string]: unknown;
     };
-  };
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ContactUs".
- */
-export interface ContactUs {
-  id: string;
-  banner: {
-    backgroundImage: string | GlobalMedia;
-    heading: string;
-  };
-  'main-title': {
-    title: string;
-    description: string;
-  };
-  locations?:
-    | {
-        location: string;
-        'operating-hours': string;
-        'telephone-number': string;
-        'fax-number': string;
-        id?: string | null;
-      }[]
-    | null;
-  'get-in-touch': {
-    title: {
-      root: {
-        type: string;
-        children: {
-          type: any;
-          version: number;
-          [k: string]: unknown;
-        }[];
-        direction: ('ltr' | 'rtl') | null;
-        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-        indent: number;
-        version: number;
-      };
-      [k: string]: unknown;
-    };
     'background-image': string | GlobalMedia;
   };
   updatedAt?: string | null;
@@ -1462,42 +1411,6 @@ export interface PrivacyPolicySelect<T extends boolean = true> {
     | {
         title?: T;
         introduction?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ContactUs_select".
- */
-export interface ContactUsSelect<T extends boolean = true> {
-  banner?:
-    | T
-    | {
-        backgroundImage?: T;
-        heading?: T;
-      };
-  'main-title'?:
-    | T
-    | {
-        title?: T;
-        description?: T;
-      };
-  locations?:
-    | T
-    | {
-        location?: T;
-        'operating-hours'?: T;
-        'telephone-number'?: T;
-        'fax-number'?: T;
-        id?: T;
-      };
-  'get-in-touch'?:
-    | T
-    | {
-        title?: T;
-        'background-image'?: T;
       };
   updatedAt?: T;
   createdAt?: T;

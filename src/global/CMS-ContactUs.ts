@@ -95,13 +95,31 @@ export const CMS_ContactUs: GlobalConfig = {
       label: 'Get In Touch',
       fields: [
         {
-          name: 'title',
-          type: 'richText',
-          label: 'title',
-          required: true,
-          editor: lexicalEditor({
-            features: ({ defaultFeatures }) => [FixedToolbarFeature(), ...defaultFeatures],
-          }),
+          name: 'socialLinks',
+          type: 'array',
+          label: 'Follow us on social media',
+          maxRows: 7,
+          fields: [
+            {
+              name: 'platform',
+              type: 'select',
+              label: 'Platform',
+              options: [
+                { label: 'Facebook', value: 'facebook' },
+                { label: 'Line', value: 'line' },
+                { label: 'YouTube', value: 'youtube' },
+                { label: 'Instagram', value: 'instagram' },
+                { label: 'Phone', value: 'phone' },
+                { label: 'TikTok', value: 'tiktok' },
+                { label: 'Twitter', value: 'twitter' },
+              ],
+            },
+            {
+              name: 'url',
+              type: 'text',
+              label: 'URL/Link',
+            },
+          ],
         },
         {
           name: 'background-image',
