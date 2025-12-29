@@ -24,6 +24,8 @@ import { CMS_WarrantyServices } from './global/CMS-Warranty&Services'
 import { CMS_AboutUs } from './global/CMS-AboutUs'
 import { CMS_TermsConditions } from './global/CMS-Terms&Conditions'
 import { CMS_PrivacyPolicy } from './global/CMS-PrivacyPolicy'
+import { CMS_ContactUs } from './global/CMS-ContactUs'
+import { CMS_Blog } from './global/CMS-Blog'
 import { ContactRequests } from './collections/ContactRequests'
 
 const filename = fileURLToPath(import.meta.url)
@@ -36,7 +38,20 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Admins, Models, Types, Categories, Products, Variants, Customers, Address],
+  collections: [
+    Admins,
+    Models,
+    Types,
+    Categories,
+    Products,
+    Variants,
+    Customers,
+    Address,
+    Medias,
+    GlobalMedias,
+    Blog,
+    ContactRequests,
+  ],
   globals: [
     Footer,
     Home,
@@ -46,18 +61,6 @@ export default buildConfig({
     CMS_PrivacyPolicy,
     CMS_ContactUs,
     CMS_Blog,
-  ],
-  collections: [
-    Admins,
-    Models,
-    Types,
-    Categories,
-    Products,
-    Variants,
-    Customers,
-    Medias,
-    GlobalMedias,
-    ContactRequests,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

@@ -78,6 +78,7 @@ export interface Config {
     address: Address;
     media: Media;
     'global-medias': GlobalMedia;
+    blog: Blog;
     'contact-requests': ContactRequest;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -96,6 +97,7 @@ export interface Config {
     address: AddressSelect<false> | AddressSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     'global-medias': GlobalMediasSelect<false> | GlobalMediasSelect<true>;
+    blog: BlogSelect<false> | BlogSelect<true>;
     'contact-requests': ContactRequestsSelect<false> | ContactRequestsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -269,7 +271,6 @@ export interface Customer {
   id: string;
   name: string;
   phone?: string | null;
-  addresses?: (string | Address)[] | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -295,6 +296,10 @@ export interface Customer {
 export interface Address {
   id: string;
   /**
+   * Customer who owns this address
+   */
+  customer: string | Customer;
+  /**
    * e.g., Home, Office, Headquarters
    */
   name: string;
@@ -307,6 +312,11 @@ export interface Address {
   district: string;
   subDistrict: string;
   postalCode: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
 export interface Media {
@@ -381,6 +391,32 @@ export interface GlobalMedia {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog".
+ */
+export interface Blog {
+  id: string;
+  title: string;
+  summary: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  type: 'our-blog' | 'external-resources';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "contact-requests".
  */
 export interface ContactRequest {
@@ -449,12 +485,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'address';
         value: string | Address;
+      } | null)
+    | ({
         relationTo: 'media';
         value: string | Media;
       } | null)
     | ({
         relationTo: 'global-medias';
         value: string | GlobalMedia;
+      } | null)
+    | ({
+        relationTo: 'blog';
+        value: string | Blog;
       } | null)
     | ({
         relationTo: 'contact-requests';
@@ -598,7 +640,6 @@ export interface VariantsSelect<T extends boolean = true> {
 export interface CustomersSelect<T extends boolean = true> {
   name?: T;
   phone?: T;
-  addresses?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -621,6 +662,7 @@ export interface CustomersSelect<T extends boolean = true> {
  * via the `definition` "address_select".
  */
 export interface AddressSelect<T extends boolean = true> {
+  customer?: T;
   name?: T;
   isDefault?: T;
   address?: T;
@@ -628,6 +670,11 @@ export interface AddressSelect<T extends boolean = true> {
   district?: T;
   subDistrict?: T;
   postalCode?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
@@ -707,6 +754,17 @@ export interface GlobalMediasSelect<T extends boolean = true> {
               filename?: T;
             };
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog_select".
+ */
+export interface BlogSelect<T extends boolean = true> {
+  title?: T;
+  summary?: T;
+  type?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1102,6 +1160,41 @@ export interface PrivacyPolicy {
       };
       [k: string]: unknown;
     };
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContactUs".
+ */
+export interface ContactUs {
+  id: string;
+  banner: {
+    backgroundImage: string | GlobalMedia;
+    heading: string;
+  };
+  'main-title': {
+    title: string;
+    description: string;
+  };
+  locations?:
+    | {
+        location: string;
+        'operating-hours': string;
+        'telephone-number': string;
+        'fax-number': string;
+        id?: string | null;
+      }[]
+    | null;
+  'get-in-touch': {
+    socialLinks?:
+      | {
+          platform?: ('facebook' | 'line' | 'youtube' | 'instagram' | 'phone' | 'tiktok' | 'twitter') | null;
+          url?: string | null;
+          id?: string | null;
+        }[]
+      | null;
     'background-image': string | GlobalMedia;
   };
   updatedAt?: string | null;
@@ -1444,6 +1537,48 @@ export interface PrivacyPolicySelect<T extends boolean = true> {
     | {
         title?: T;
         introduction?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContactUs_select".
+ */
+export interface ContactUsSelect<T extends boolean = true> {
+  banner?:
+    | T
+    | {
+        backgroundImage?: T;
+        heading?: T;
+      };
+  'main-title'?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
+  locations?:
+    | T
+    | {
+        location?: T;
+        'operating-hours'?: T;
+        'telephone-number'?: T;
+        'fax-number'?: T;
+        id?: T;
+      };
+  'get-in-touch'?:
+    | T
+    | {
+        socialLinks?:
+          | T
+          | {
+              platform?: T;
+              url?: T;
+              id?: T;
+            };
+        'background-image'?: T;
       };
   updatedAt?: T;
   createdAt?: T;
