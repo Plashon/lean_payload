@@ -14,6 +14,16 @@ import { Models } from './collections/Model'
 import { Products } from './collections/Product'
 import { Types } from './collections/Type'
 import { Variants } from './collections/Variant'
+import { GlobalMedias } from './collections/GlobalMedia'
+import { Blog } from './collections/Blog'
+
+import { Footer } from '@/global/Footer'
+import { Home } from './global/Home'
+import { CMS_WarrantyServices } from './global/CMS-Warranty&Services'
+import { CMS_AboutUs } from './global/CMS-AboutUs'
+import { CMS_TermsConditions } from './global/CMS-Terms&Conditions'
+import { CMS_PrivacyPolicy } from './global/CMS-PrivacyPolicy'
+import { ContactRequests } from './collections/ContactRequests'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)

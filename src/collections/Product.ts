@@ -1,5 +1,13 @@
 import type { CollectionConfig } from 'payload'
 import { admin } from '@/access/admin'
+import {
+  createProduct,
+  deleteProduct,
+  getAllProducts,
+  getProductById,
+  updateProduct,
+} from '@/product/product.controller'
+
 export const Products: CollectionConfig = {
   slug: 'products',
   admin: {
@@ -60,6 +68,41 @@ export const Products: CollectionConfig = {
       name: 'model',
       type: 'relationship',
       relationTo: 'models',
+      required: true,
+    },
+    {
+      name: 'variant',
+      type: 'relationship',
+      relationTo: 'variants',
+      required: true,
+      hasMany: true,
+    },
+  ],
+  endpoints: [
+    {
+      path: '/create-product',
+      method: 'post',
+      handler: createProduct,
+    },
+    {
+      path: '/get-all-products',
+      method: 'get',
+      handler: getAllProducts,
+    },
+    {
+      path: '/get-product/:id',
+      method: 'get',
+      handler: getProductById,
+    },
+    {
+      path: '/update-product/:id',
+      method: 'put',
+      handler: updateProduct,
+    },
+    {
+      path: '/delete-product/:id',
+      method: 'delete',
+      handler: deleteProduct,
     },
   ],
 }

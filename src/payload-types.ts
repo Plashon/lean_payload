@@ -100,8 +100,26 @@ export interface Config {
     defaultIDType: string;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    footer: Footer;
+    Home: Home;
+    WarrantyServices: WarrantyService;
+    AboutUs: AboutUs;
+    TermsConditions: TermsCondition;
+    PrivacyPolicy: PrivacyPolicy;
+    ContactUs: ContactUs;
+    'cms-blog': CmsBlog;
+  };
+  globalsSelect: {
+    footer: FooterSelect<false> | FooterSelect<true>;
+    Home: HomeSelect<false> | HomeSelect<true>;
+    WarrantyServices: WarrantyServicesSelect<false> | WarrantyServicesSelect<true>;
+    AboutUs: AboutUsSelect<false> | AboutUsSelect<true>;
+    TermsConditions: TermsConditionsSelect<false> | TermsConditionsSelect<true>;
+    PrivacyPolicy: PrivacyPolicySelect<false> | PrivacyPolicySelect<true>;
+    ContactUs: ContactUsSelect<false> | ContactUsSelect<true>;
+    'cms-blog': CmsBlogSelect<false> | CmsBlogSelect<true>;
+  };
   locale: null;
   user:
     | (Admin & {
@@ -195,7 +213,7 @@ export interface Type {
   id: string;
   typeName: string;
   typeCode: string;
-  catagory?: (string | null) | Category;
+  category?: (string | null) | Category;
   updatedAt: string;
   createdAt: string;
 }
@@ -221,7 +239,8 @@ export interface Product {
   price: number;
   stock: number;
   status: 'active' | 'inactive';
-  model?: (string | null) | Model;
+  model: string | Model;
+  variant: (string | Variant)[];
   updatedAt: string;
   createdAt: string;
 }
@@ -433,7 +452,7 @@ export interface ModelsSelect<T extends boolean = true> {
 export interface TypesSelect<T extends boolean = true> {
   typeName?: T;
   typeCode?: T;
-  catagory?: T;
+  category?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -458,6 +477,7 @@ export interface ProductsSelect<T extends boolean = true> {
   stock?: T;
   status?: T;
   model?: T;
+  variant?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -550,6 +570,703 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer".
+ */
+export interface Footer {
+  id: string;
+  logo?: (string | null) | GlobalMedia;
+  contactInfo?: {
+    title?: string | null;
+    socialLinks?:
+      | {
+          platform?: ('facebook' | 'line' | 'youtube' | 'instagram' | 'phone' | 'tiktok' | 'twitter') | null;
+          url?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  menuColumns?:
+    | {
+        title: string;
+        items?:
+          | {
+              label: string;
+              link: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  bottomSection?: {
+    copyright?: string | null;
+    links?:
+      | {
+          label: string;
+          link: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Home".
+ */
+export interface Home {
+  id: string;
+  slides?:
+    | {
+        backgroundImage: string | GlobalMedia;
+        heading: string;
+        description?: string | null;
+        ctaButton?: {
+          text?: string | null;
+          link?: string | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Time between slide transitions
+   */
+  autoPlaySpeed?: number | null;
+  'product-showcase': {
+    heading: string;
+    description: string;
+    products?:
+      | {
+          image: string | GlobalMedia;
+          title: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  sections?:
+    | {
+        layout: 'horizontal-text-left' | 'horizontal-text-right';
+        heading: string;
+        description: string;
+        image: string | GlobalMedia;
+        ctaButton?: {
+          enabledButton?: boolean | null;
+          text?: string | null;
+          link?: string | null;
+        };
+        styling?: {
+          textAreaBg?: ('white' | 'light-beige' | 'light-gray' | 'light-blue') | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  'business-overview': {
+    heading: string;
+    image: string | GlobalMedia;
+    button?: {
+      text?: string | null;
+      url?: string | null;
+    };
+  };
+  'product-overview': {
+    heading: string;
+    image: string | GlobalMedia;
+    features?:
+      | {
+          icon: string | GlobalMedia;
+          title: string;
+          description: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  'brand-intro': {
+    image: string | GlobalMedia;
+    text: string;
+    button: {
+      label: string;
+      url: string;
+    };
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WarrantyServices".
+ */
+export interface WarrantyService {
+  id: string;
+  banner: {
+    backgroundImage: string | GlobalMedia;
+    heading: string;
+  };
+  header: string;
+  'types-of-warranty': {
+    heading: string;
+    description: string;
+    warranties?:
+      | {
+          logo: string | GlobalMedia;
+          title: string;
+          detail: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  'contact-hatari-suport': {
+    heading?: string | null;
+    button: {
+      text: string;
+      url: string;
+    };
+    backgroudImage: string | GlobalMedia;
+  };
+  'service-center': {
+    header: string;
+    detail: string;
+    locations: {
+      'main-location': {
+        'center-name': string;
+        contact: {
+          location: string;
+          'operating-hours': string;
+          'telephone-number': string;
+        };
+        button: {
+          text: string;
+          url: string;
+        };
+      };
+      'secondary-location'?:
+        | {
+            'center-name': string;
+            contact: {
+              location: string;
+              'operating-hours': string;
+              'telephone-number': string;
+              button: {
+                text: string;
+                url: string;
+              };
+            };
+            id?: string | null;
+          }[]
+        | null;
+    };
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutUs".
+ */
+export interface AboutUs {
+  id: string;
+  banner: {
+    backgroundImage: string | GlobalMedia;
+    heading: string;
+  };
+  heading: string;
+  ourHistory?:
+    | {
+        historyImage: string | GlobalMedia;
+        herder: string;
+        description: string;
+        id?: string | null;
+      }[]
+    | null;
+  'company-overview': {
+    heading: string;
+    'sub-heading': string;
+    companies?:
+      | {
+          image: string | Media;
+          name: string;
+          description: string;
+          id?: string | null;
+        }[]
+      | null;
+    'our-story': {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
+    'ender-image': string | GlobalMedia;
+  };
+  'brand-vision': {
+    backgroudImage: string | GlobalMedia;
+    heading: string;
+    description: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
+  };
+  'tagline-banner': {
+    tagline: string;
+    backgroundImage: string | GlobalMedia;
+  };
+  'our-values': {
+    heading: string;
+    description: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
+    'values-card'?:
+      | {
+          image: string | GlobalMedia;
+          title: string;
+          description: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TermsConditions".
+ */
+export interface TermsCondition {
+  id: string;
+  'terms-and-conditions': {
+    title: string;
+    introduction: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PrivacyPolicy".
+ */
+export interface PrivacyPolicy {
+  id: string;
+  'privacy-policy': {
+    title: string;
+    introduction: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
+    'background-image': string | GlobalMedia;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cms-blog".
+ */
+export interface CmsBlog {
+  id: string;
+  /**
+   * Select a blog post to feature at the top
+   */
+  blog: string | Blog;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer_select".
+ */
+export interface FooterSelect<T extends boolean = true> {
+  logo?: T;
+  contactInfo?:
+    | T
+    | {
+        title?: T;
+        socialLinks?:
+          | T
+          | {
+              platform?: T;
+              url?: T;
+              id?: T;
+            };
+      };
+  menuColumns?:
+    | T
+    | {
+        title?: T;
+        items?:
+          | T
+          | {
+              label?: T;
+              link?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  bottomSection?:
+    | T
+    | {
+        copyright?: T;
+        links?:
+          | T
+          | {
+              label?: T;
+              link?: T;
+              id?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Home_select".
+ */
+export interface HomeSelect<T extends boolean = true> {
+  slides?:
+    | T
+    | {
+        backgroundImage?: T;
+        heading?: T;
+        description?: T;
+        ctaButton?:
+          | T
+          | {
+              text?: T;
+              link?: T;
+            };
+        id?: T;
+      };
+  autoPlaySpeed?: T;
+  'product-showcase'?:
+    | T
+    | {
+        heading?: T;
+        description?: T;
+        products?:
+          | T
+          | {
+              image?: T;
+              title?: T;
+              id?: T;
+            };
+      };
+  sections?:
+    | T
+    | {
+        layout?: T;
+        heading?: T;
+        description?: T;
+        image?: T;
+        ctaButton?:
+          | T
+          | {
+              enabledButton?: T;
+              text?: T;
+              link?: T;
+            };
+        styling?:
+          | T
+          | {
+              textAreaBg?: T;
+            };
+        id?: T;
+      };
+  'business-overview'?:
+    | T
+    | {
+        heading?: T;
+        image?: T;
+        button?:
+          | T
+          | {
+              text?: T;
+              url?: T;
+            };
+      };
+  'product-overview'?:
+    | T
+    | {
+        heading?: T;
+        image?: T;
+        features?:
+          | T
+          | {
+              icon?: T;
+              title?: T;
+              description?: T;
+              id?: T;
+            };
+      };
+  'brand-intro'?:
+    | T
+    | {
+        image?: T;
+        text?: T;
+        button?:
+          | T
+          | {
+              label?: T;
+              url?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WarrantyServices_select".
+ */
+export interface WarrantyServicesSelect<T extends boolean = true> {
+  banner?:
+    | T
+    | {
+        backgroundImage?: T;
+        heading?: T;
+      };
+  header?: T;
+  'types-of-warranty'?:
+    | T
+    | {
+        heading?: T;
+        description?: T;
+        warranties?:
+          | T
+          | {
+              logo?: T;
+              title?: T;
+              detail?: T;
+              id?: T;
+            };
+      };
+  'contact-hatari-suport'?:
+    | T
+    | {
+        heading?: T;
+        button?:
+          | T
+          | {
+              text?: T;
+              url?: T;
+            };
+        backgroudImage?: T;
+      };
+  'service-center'?:
+    | T
+    | {
+        header?: T;
+        detail?: T;
+        locations?:
+          | T
+          | {
+              'main-location'?:
+                | T
+                | {
+                    'center-name'?: T;
+                    contact?:
+                      | T
+                      | {
+                          location?: T;
+                          'operating-hours'?: T;
+                          'telephone-number'?: T;
+                        };
+                    button?:
+                      | T
+                      | {
+                          text?: T;
+                          url?: T;
+                        };
+                  };
+              'secondary-location'?:
+                | T
+                | {
+                    'center-name'?: T;
+                    contact?:
+                      | T
+                      | {
+                          location?: T;
+                          'operating-hours'?: T;
+                          'telephone-number'?: T;
+                          button?:
+                            | T
+                            | {
+                                text?: T;
+                                url?: T;
+                              };
+                        };
+                    id?: T;
+                  };
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutUs_select".
+ */
+export interface AboutUsSelect<T extends boolean = true> {
+  banner?:
+    | T
+    | {
+        backgroundImage?: T;
+        heading?: T;
+      };
+  heading?: T;
+  ourHistory?:
+    | T
+    | {
+        historyImage?: T;
+        herder?: T;
+        description?: T;
+        id?: T;
+      };
+  'company-overview'?:
+    | T
+    | {
+        heading?: T;
+        'sub-heading'?: T;
+        companies?:
+          | T
+          | {
+              image?: T;
+              name?: T;
+              description?: T;
+              id?: T;
+            };
+        'our-story'?: T;
+        'ender-image'?: T;
+      };
+  'brand-vision'?:
+    | T
+    | {
+        backgroudImage?: T;
+        heading?: T;
+        description?: T;
+      };
+  'tagline-banner'?:
+    | T
+    | {
+        tagline?: T;
+        backgroundImage?: T;
+      };
+  'our-values'?:
+    | T
+    | {
+        heading?: T;
+        description?: T;
+        'values-card'?:
+          | T
+          | {
+              image?: T;
+              title?: T;
+              description?: T;
+              id?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TermsConditions_select".
+ */
+export interface TermsConditionsSelect<T extends boolean = true> {
+  'terms-and-conditions'?:
+    | T
+    | {
+        title?: T;
+        introduction?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PrivacyPolicy_select".
+ */
+export interface PrivacyPolicySelect<T extends boolean = true> {
+  'privacy-policy'?:
+    | T
+    | {
+        title?: T;
+        introduction?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cms-blog_select".
+ */
+export interface CmsBlogSelect<T extends boolean = true> {
+  blog?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

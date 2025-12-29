@@ -36,5 +36,8 @@
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "explicit"
     }
-  }
+  },
+  "chat.mcp.assisted.nuget.enabled": true,
+  "chat.mcp.serverSampling": {},
+  "tailwindCSS.experimental.configFile": null
 }
