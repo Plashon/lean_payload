@@ -9,7 +9,7 @@ import sharp from 'sharp'
 import { Admins } from './collections/Admin'
 import { Categories } from './collections/Category'
 import { Customers } from './collections/Customer'
-import { Medias } from './collections/Media'
+import { Address } from './collections/Address'
 import { Models } from './collections/Model'
 import { Products } from './collections/Product'
 import { Types } from './collections/Type'
@@ -35,28 +35,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  globals: [
-    Footer,
-    Home,
-    CMS_WarrantyServices,
-    CMS_AboutUs,
-    CMS_TermsConditions,
-    CMS_PrivacyPolicy,
-    CMS_ContactUs,
-    CMS_Blog,
-  ],
-  collections: [
-    Admins,
-    Models,
-    Types,
-    Categories,
-    Products,
-    Variants,
-    Customers,
-    Medias,
-    GlobalMedias,
-    ContactRequests,
-  ],
+  collections: [Admins, Models, Types, Categories, Products, Variants, Customers, Address],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

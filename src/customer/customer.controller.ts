@@ -129,10 +129,6 @@ export const getAllCustomers = async (req: any) => {
 }
 
 export const getCustomerById = async (req: any) => {
-  // console.log('REQ KEYS =>', Object.keys(req))
-  // console.log('PARAMS =>', req.params)
-  // console.log('ROUTE PARAMS =>', req.routeParams)
-
   try {
     if (req.user?.collection !== 'admins') {
       return Response.json(
@@ -183,13 +179,6 @@ export const getCustomerById = async (req: any) => {
 
 export const updateCustomer = async (req: any) => {
   try {
-    if (req.user?.collection !== 'admins') {
-      return Response.json(
-        { success: false, message: 'ไม่สามารถดึงข้อมูลลูกค้าได้ - ไม่มีสิทธิ์' },
-        { status: 403 },
-      )
-    }
-
     const { id } = await req.routeParams
     if (!id) {
       return Response.json({
