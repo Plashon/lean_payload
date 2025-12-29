@@ -75,6 +75,7 @@ export interface Config {
     products: Product;
     variants: Variant;
     customers: Customer;
+    address: Address;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -89,6 +90,7 @@ export interface Config {
     products: ProductsSelect<false> | ProductsSelect<true>;
     variants: VariantsSelect<false> | VariantsSelect<true>;
     customers: CustomersSelect<false> | CustomersSelect<true>;
+    address: AddressSelect<false> | AddressSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -242,6 +244,7 @@ export interface Customer {
   id: string;
   name: string;
   phone?: string | null;
+  addresses?: (string | Address)[] | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -259,6 +262,28 @@ export interface Customer {
       }[]
     | null;
   password?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "address".
+ */
+export interface Address {
+  id: string;
+  /**
+   * e.g., Home, Office, Headquarters
+   */
+  name: string;
+  /**
+   * Mark this as the default address
+   */
+  isDefault?: boolean | null;
+  address: string;
+  province: string;
+  district: string;
+  subDistrict: string;
+  postalCode: string;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -311,6 +336,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'customers';
         value: string | Customer;
+      } | null)
+    | ({
+        relationTo: 'address';
+        value: string | Address;
       } | null);
   globalSlug?: string | null;
   user:
@@ -449,6 +478,7 @@ export interface VariantsSelect<T extends boolean = true> {
 export interface CustomersSelect<T extends boolean = true> {
   name?: T;
   phone?: T;
+  addresses?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -465,6 +495,21 @@ export interface CustomersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "address_select".
+ */
+export interface AddressSelect<T extends boolean = true> {
+  name?: T;
+  isDefault?: T;
+  address?: T;
+  province?: T;
+  district?: T;
+  subDistrict?: T;
+  postalCode?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
