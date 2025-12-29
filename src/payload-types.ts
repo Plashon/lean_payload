@@ -75,7 +75,9 @@ export interface Config {
     products: Product;
     variants: Variant;
     customers: Customer;
-    address: Address;
+    media: Media;
+    'global-medias': GlobalMedia;
+    'contact-requests': ContactRequest;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -90,7 +92,9 @@ export interface Config {
     products: ProductsSelect<false> | ProductsSelect<true>;
     variants: VariantsSelect<false> | VariantsSelect<true>;
     customers: CustomersSelect<false> | CustomersSelect<true>;
-    address: AddressSelect<false> | AddressSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
+    'global-medias': GlobalMediasSelect<false> | GlobalMediasSelect<true>;
+    'contact-requests': ContactRequestsSelect<false> | ContactRequestsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -263,7 +267,6 @@ export interface Customer {
   id: string;
   name: string;
   phone?: string | null;
-  addresses?: (string | Address)[] | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -284,23 +287,90 @@ export interface Customer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "address".
+ * via the `definition` "media".
  */
-export interface Address {
+export interface Media {
   id: string;
-  /**
-   * e.g., Home, Office, Headquarters
-   */
-  name: string;
-  /**
-   * Mark this as the default address
-   */
-  isDefault?: boolean | null;
-  address: string;
-  province: string;
-  district: string;
-  subDistrict: string;
-  postalCode: string;
+  alt?: string | null;
+  product?: (string | null) | Product;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "global-medias".
+ */
+export interface GlobalMedia {
+  id: string;
+  alt: string;
+  caption?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    tablet?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    desktop?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-requests".
+ */
+export interface ContactRequest {
+  id: string;
+  fullName: string;
+  email: string;
+  company: string;
+  jobTitle: string;
+  interestedProducts: (string | Category)[];
+  message?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -357,8 +427,16 @@ export interface PayloadLockedDocument {
         value: string | Customer;
       } | null)
     | ({
-        relationTo: 'address';
-        value: string | Address;
+        relationTo: 'media';
+        value: string | Media;
+      } | null)
+    | ({
+        relationTo: 'global-medias';
+        value: string | GlobalMedia;
+      } | null)
+    | ({
+        relationTo: 'contact-requests';
+        value: string | ContactRequest;
       } | null);
   globalSlug?: string | null;
   user:
@@ -498,7 +576,6 @@ export interface VariantsSelect<T extends boolean = true> {
 export interface CustomersSelect<T extends boolean = true> {
   name?: T;
   phone?: T;
-  addresses?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -518,16 +595,97 @@ export interface CustomersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "address_select".
+ * via the `definition` "media_select".
  */
-export interface AddressSelect<T extends boolean = true> {
-  name?: T;
-  isDefault?: T;
-  address?: T;
-  province?: T;
-  district?: T;
-  subDistrict?: T;
-  postalCode?: T;
+export interface MediaSelect<T extends boolean = true> {
+  alt?: T;
+  product?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "global-medias_select".
+ */
+export interface GlobalMediasSelect<T extends boolean = true> {
+  alt?: T;
+  caption?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        card?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        tablet?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        desktop?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-requests_select".
+ */
+export interface ContactRequestsSelect<T extends boolean = true> {
+  fullName?: T;
+  email?: T;
+  company?: T;
+  jobTitle?: T;
+  interestedProducts?: T;
+  message?: T;
   updatedAt?: T;
   createdAt?: T;
 }

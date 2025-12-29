@@ -7,7 +7,6 @@ import {
   getCustomerById,
   updateCustomer,
 } from '@/customer/customer.controller'
-import { createAddress, updateAddress, deleteAddress } from '@/address/address.controller'
 import type { CollectionConfig } from 'payload'
 
 export const Customers: CollectionConfig = {
@@ -17,7 +16,7 @@ export const Customers: CollectionConfig = {
   },
   auth: true,
   access: {
-    read: () => true,
+    read: admin,
     create: () => true,
     update: customer,
     delete: admin,
@@ -38,12 +37,6 @@ export const Customers: CollectionConfig = {
     {
       name: 'phone',
       type: 'text',
-    },
-    {
-      name: 'addresses',
-      type: 'relationship',
-      relationTo: 'address',
-      hasMany: true,
     },
   ],
   endpoints: [
@@ -71,21 +64,6 @@ export const Customers: CollectionConfig = {
       path: '/delete-customer/:id',
       method: 'delete',
       handler: deleteCustomer,
-    },
-    {
-      path: '/:id/addresses',
-      method: 'post',
-      handler: createAddress,
-    },
-    {
-      path: '/:id/addresses/:addressId',
-      method: 'put',
-      handler: updateAddress,
-    },
-    {
-      path: '/:id/addresses/:addressId',
-      method: 'delete',
-      handler: deleteAddress,
     },
   ],
 }
