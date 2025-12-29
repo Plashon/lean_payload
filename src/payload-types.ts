@@ -75,6 +75,7 @@ export interface Config {
     products: Product;
     variants: Variant;
     customers: Customer;
+    address: Address;
     media: Media;
     'global-medias': GlobalMedia;
     'contact-requests': ContactRequest;
@@ -92,6 +93,7 @@ export interface Config {
     products: ProductsSelect<false> | ProductsSelect<true>;
     variants: VariantsSelect<false> | VariantsSelect<true>;
     customers: CustomersSelect<false> | CustomersSelect<true>;
+    address: AddressSelect<false> | AddressSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     'global-medias': GlobalMediasSelect<false> | GlobalMediasSelect<true>;
     'contact-requests': ContactRequestsSelect<false> | ContactRequestsSelect<true>;
@@ -267,6 +269,7 @@ export interface Customer {
   id: string;
   name: string;
   phone?: string | null;
+  addresses?: (string | Address)[] | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -287,6 +290,23 @@ export interface Customer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "address".
+ */
+export interface Address {
+  id: string;
+  /**
+   * e.g., Home, Office, Headquarters
+   */
+  name: string;
+  /**
+   * Mark this as the default address
+   */
+  isDefault?: boolean | null;
+  address: string;
+  province: string;
+  district: string;
+  subDistrict: string;
+  postalCode: string;
  * via the `definition` "media".
  */
 export interface Media {
@@ -427,6 +447,8 @@ export interface PayloadLockedDocument {
         value: string | Customer;
       } | null)
     | ({
+        relationTo: 'address';
+        value: string | Address;
         relationTo: 'media';
         value: string | Media;
       } | null)
@@ -576,6 +598,7 @@ export interface VariantsSelect<T extends boolean = true> {
 export interface CustomersSelect<T extends boolean = true> {
   name?: T;
   phone?: T;
+  addresses?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -595,6 +618,16 @@ export interface CustomersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "address_select".
+ */
+export interface AddressSelect<T extends boolean = true> {
+  name?: T;
+  isDefault?: T;
+  address?: T;
+  province?: T;
+  district?: T;
+  subDistrict?: T;
+  postalCode?: T;
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
