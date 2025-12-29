@@ -1,4 +1,3 @@
-import { password } from 'payload/shared'
 import z from 'zod'
 
 const CustomerSchema = z.object({
