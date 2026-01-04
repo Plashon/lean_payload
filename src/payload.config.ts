@@ -37,14 +37,6 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  globals: [
-    Footer,
-    Home,
-    CMS_WarrantyServices,
-    CMS_AboutUs,
-    CMS_TermsConditions,
-    CMS_PrivacyPolicy,
-  ],
   collections: [
     Admins,
     Models,
@@ -53,12 +45,10 @@ export default buildConfig({
     Products,
     Variants,
     Customers,
-    Address,
     Medias,
     GlobalMedias,
     Blog,
     ContactRequests,
-    Blog,
   ],
   globals: [
     Footer,

@@ -59,193 +59,128 @@ export type SupportedTimezones =
   | 'Pacific/Guam'
   | 'Pacific/Noumea'
   | 'Pacific/Auckland'
-  | 'Pacific/Fiji'
+  | 'Pacific/Fiji';
 
 export interface Config {
   auth: {
-    admins: AdminAuthOperations
-    customers: CustomerAuthOperations
-  }
-  blocks: {}
+    admins: AdminAuthOperations;
+    customers: CustomerAuthOperations;
+  };
+  blocks: {};
   collections: {
-    admins: Admin
-    models: Model
-    types: Type
-    categories: Category
-    products: Product
-    variants: Variant
-    customers: Customer
-    address: Address
-    'payload-kv': PayloadKv
-    'payload-locked-documents': PayloadLockedDocument
-    'payload-preferences': PayloadPreference
-    'payload-migrations': PayloadMigration
-  }
-  collectionsJoins: {}
+    admins: Admin;
+    models: Model;
+    types: Type;
+    categories: Category;
+    products: Product;
+    variants: Variant;
+    customers: Customer;
+    media: Media;
+    'global-medias': GlobalMedia;
+    blog: Blog;
+    'contact-requests': ContactRequest;
+    'payload-kv': PayloadKv;
+    'payload-locked-documents': PayloadLockedDocument;
+    'payload-preferences': PayloadPreference;
+    'payload-migrations': PayloadMigration;
+  };
+  collectionsJoins: {};
   collectionsSelect: {
-    admins: AdminsSelect<false> | AdminsSelect<true>
-    models: ModelsSelect<false> | ModelsSelect<true>
-    types: TypesSelect<false> | TypesSelect<true>
-    categories: CategoriesSelect<false> | CategoriesSelect<true>
-    products: ProductsSelect<false> | ProductsSelect<true>
-    variants: VariantsSelect<false> | VariantsSelect<true>
-    customers: CustomersSelect<false> | CustomersSelect<true>
-    address: AddressSelect<false> | AddressSelect<true>
-    'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>
-    'payload-locked-documents':
-      | PayloadLockedDocumentsSelect<false>
-      | PayloadLockedDocumentsSelect<true>
-    'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>
-    'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>
-  }
+    admins: AdminsSelect<false> | AdminsSelect<true>;
+    models: ModelsSelect<false> | ModelsSelect<true>;
+    types: TypesSelect<false> | TypesSelect<true>;
+    categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    products: ProductsSelect<false> | ProductsSelect<true>;
+    variants: VariantsSelect<false> | VariantsSelect<true>;
+    customers: CustomersSelect<false> | CustomersSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
+    'global-medias': GlobalMediasSelect<false> | GlobalMediasSelect<true>;
+    blog: BlogSelect<false> | BlogSelect<true>;
+    'contact-requests': ContactRequestsSelect<false> | ContactRequestsSelect<true>;
+    'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
+    'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
+    'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
+    'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
+  };
   db: {
-    defaultIDType: string
-  }
-  fallbackLocale: null
-  globals: {}
-  globalsSelect: {}
-  locale: null
+    defaultIDType: string;
+  };
+  fallbackLocale: null;
+  globals: {
+    footer: Footer;
+    Home: Home;
+    WarrantyServices: WarrantyService;
+    AboutUs: AboutUs;
+    TermsConditions: TermsCondition;
+    PrivacyPolicy: PrivacyPolicy;
+    ContactUs: ContactUs;
+    'cms-blog': CmsBlog;
+  };
+  globalsSelect: {
+    footer: FooterSelect<false> | FooterSelect<true>;
+    Home: HomeSelect<false> | HomeSelect<true>;
+    WarrantyServices: WarrantyServicesSelect<false> | WarrantyServicesSelect<true>;
+    AboutUs: AboutUsSelect<false> | AboutUsSelect<true>;
+    TermsConditions: TermsConditionsSelect<false> | TermsConditionsSelect<true>;
+    PrivacyPolicy: PrivacyPolicySelect<false> | PrivacyPolicySelect<true>;
+    ContactUs: ContactUsSelect<false> | ContactUsSelect<true>;
+    'cms-blog': CmsBlogSelect<false> | CmsBlogSelect<true>;
+  };
+  locale: null;
   user:
     | (Admin & {
-        collection: 'admins'
+        collection: 'admins';
       })
     | (Customer & {
-        collection: 'customers'
-      })
+        collection: 'customers';
+      });
   jobs: {
-    tasks: unknown
-    workflows: unknown
-  }
+    tasks: unknown;
+    workflows: unknown;
+  };
 }
 export interface AdminAuthOperations {
   forgotPassword: {
-    email: string
-    password: string
-  }
+    email: string;
+    password: string;
+  };
   login: {
-    email: string
-    password: string
-  }
+    email: string;
+    password: string;
+  };
   registerFirstUser: {
-    email: string
-    password: string
-  }
+    email: string;
+    password: string;
+  };
   unlock: {
-    email: string
-    password: string
-  }
+    email: string;
+    password: string;
+  };
 }
 export interface CustomerAuthOperations {
   forgotPassword: {
-    email: string
-    password: string
-  }
+    email: string;
+    password: string;
+  };
   login: {
-    email: string
-    password: string
-  }
+    email: string;
+    password: string;
+  };
   registerFirstUser: {
-    email: string
-    password: string
-  }
+    email: string;
+    password: string;
+  };
   unlock: {
-    email: string
-    password: string
-  }
+    email: string;
+    password: string;
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "admins".
  */
 export interface Admin {
-  id: string
-  updatedAt: string
-  createdAt: string
-  email: string
-  resetPasswordToken?: string | null
-  resetPasswordExpiration?: string | null
-  salt?: string | null
-  hash?: string | null
-  loginAttempts?: number | null
-  lockUntil?: string | null
-  sessions?:
-    | {
-        id: string
-        createdAt?: string | null
-        expiresAt: string
-      }[]
-    | null
-  password?: string | null
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "models".
- */
-export interface Model {
-  id: string
-  modelName: string
-  modelCode: string
-  type: string | Type
-  updatedAt: string
-  createdAt: string
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "types".
- */
-export interface Type {
-  id: string
-  typeName: string
-  typeCode: string
-  catagory?: (string | null) | Category
-  updatedAt: string
-  createdAt: string
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "categories".
- */
-export interface Category {
-  id: string
-  categoryName: string
-  categoryCode: string
-  updatedAt: string
-  createdAt: string
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "products".
- */
-export interface Product {
-  id: string
-  productName: string
-  productCode: string
-  price: number
-  stock: number
-  status: 'active' | 'inactive'
-  model?: (string | null) | Model
-  updatedAt: string
-  createdAt: string
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "variants".
- */
-export interface Variant {
-  id: string
-  variantName: string
-  variantCode: string
-  updatedAt: string
-  createdAt: string
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "customers".
- */
-export interface Customer {
   id: string;
-  name: string;
-  phone?: string | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -257,50 +192,118 @@ export interface Customer {
   lockUntil?: string | null;
   sessions?:
     | {
-        id: string
-        createdAt?: string | null
-        expiresAt: string
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
       }[]
-    | null
-  password?: string | null
+    | null;
+  password?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "address".
+ * via the `definition` "models".
  */
-export interface Address {
-  id: string
-  /**
-   * Customer who owns this address
-   */
-  customer: string | Customer
-  /**
-   * Customer who owns this address
-   */
-  customer: string | Customer;
-  /**
-   * e.g., Home, Office, Headquarters
-   */
-  name: string
-  /**
-   * Mark this as the default address
-   */
-  isDefault?: boolean | null
-  address: string
-  province: string
-  district: string
-  subDistrict: string
-  postalCode: string
-  updatedAt: string
-  createdAt: string
-  isDefault?: boolean | null;
-  address: string;
-  province: string;
-  district: string;
-  subDistrict: string;
-  postalCode: string;
+export interface Model {
+  id: string;
+  modelName: string;
+  modelCode: string;
+  type: string | Type;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "types".
+ */
+export interface Type {
+  id: string;
+  typeName: string;
+  typeCode: string;
+  category?: (string | null) | Category;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: string;
+  categoryName: string;
+  categoryCode: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products".
+ */
+export interface Product {
+  id: string;
+  productName: string;
+  productCode: string;
+  price: number;
+  stock: number;
+  status: 'active' | 'inactive';
+  model: string | Model;
+  variant: (string | Variant)[];
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "variants".
+ */
+export interface Variant {
+  id: string;
+  variantName: string;
+  variantCode: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "customers".
+ */
+export interface Customer {
+  id: string;
+  name: string;
+  phone?: string | null;
+  addresses?:
+    | {
+        /**
+         * e.g., Home, Office, Headquarters
+         */
+        name: string;
+        /**
+         * Mark this as the default address
+         */
+        isDefault?: boolean | null;
+        address: string;
+        province: string;
+        district: string;
+        subDistrict: string;
+        postalCode: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -422,64 +425,61 @@ export interface ContactRequest {
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: string
-  key: string
+  id: string;
+  key: string;
   data:
     | {
-        [k: string]: unknown
+        [k: string]: unknown;
       }
     | unknown[]
     | string
     | number
     | boolean
-    | null
+    | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: string
+  id: string;
   document?:
     | ({
-        relationTo: 'admins'
-        value: string | Admin
+        relationTo: 'admins';
+        value: string | Admin;
       } | null)
     | ({
-        relationTo: 'models'
-        value: string | Model
+        relationTo: 'models';
+        value: string | Model;
       } | null)
     | ({
-        relationTo: 'types'
-        value: string | Type
+        relationTo: 'types';
+        value: string | Type;
       } | null)
     | ({
-        relationTo: 'categories'
-        value: string | Category
+        relationTo: 'categories';
+        value: string | Category;
       } | null)
     | ({
-        relationTo: 'products'
-        value: string | Product
+        relationTo: 'products';
+        value: string | Product;
       } | null)
     | ({
-        relationTo: 'variants'
-        value: string | Variant
+        relationTo: 'variants';
+        value: string | Variant;
       } | null)
     | ({
-        relationTo: 'customers'
-        value: string | Customer
-        relationTo: 'address';
-        value: string | Address;
+        relationTo: 'customers';
+        value: string | Customer;
       } | null)
     | ({
         relationTo: 'media';
         value: string | Media;
       } | null)
     | ({
-        relationTo: 'address'
-        value: string | Address
+        relationTo: 'global-medias';
+        value: string | GlobalMedia;
       } | null)
-  globalSlug?: string | null
     | ({
         relationTo: 'blog';
         value: string | Blog;
@@ -491,163 +491,60 @@ export interface PayloadLockedDocument {
   globalSlug?: string | null;
   user:
     | {
-        relationTo: 'admins'
-        value: string | Admin
+        relationTo: 'admins';
+        value: string | Admin;
       }
     | {
-        relationTo: 'customers'
-        value: string | Customer
-      }
-  updatedAt: string
-  createdAt: string
+        relationTo: 'customers';
+        value: string | Customer;
+      };
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: string
+  id: string;
   user:
     | {
-        relationTo: 'admins'
-        value: string | Admin
+        relationTo: 'admins';
+        value: string | Admin;
       }
     | {
-        relationTo: 'customers'
-        value: string | Customer
-      }
-  key?: string | null
+        relationTo: 'customers';
+        value: string | Customer;
+      };
+  key?: string | null;
   value?:
     | {
-        [k: string]: unknown
+        [k: string]: unknown;
       }
     | unknown[]
     | string
     | number
     | boolean
-    | null
-  updatedAt: string
-  createdAt: string
+    | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: string
-  name?: string | null
-  batch?: number | null
-  updatedAt: string
-  createdAt: string
+  id: string;
+  name?: string | null;
+  batch?: number | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "admins_select".
  */
 export interface AdminsSelect<T extends boolean = true> {
-  updatedAt?: T
-  createdAt?: T
-  email?: T
-  resetPasswordToken?: T
-  resetPasswordExpiration?: T
-  salt?: T
-  hash?: T
-  loginAttempts?: T
-  lockUntil?: T
-  sessions?:
-    | T
-    | {
-        id?: T
-        createdAt?: T
-        expiresAt?: T
-      }
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "models_select".
- */
-export interface ModelsSelect<T extends boolean = true> {
-  modelName?: T
-  modelCode?: T
-  type?: T
-  updatedAt?: T
-  createdAt?: T
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "types_select".
- */
-export interface TypesSelect<T extends boolean = true> {
-  typeName?: T
-  typeCode?: T
-  catagory?: T
-  updatedAt?: T
-  createdAt?: T
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "categories_select".
- */
-export interface CategoriesSelect<T extends boolean = true> {
-  categoryName?: T
-  categoryCode?: T
-  updatedAt?: T
-  createdAt?: T
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "products_select".
- */
-export interface ProductsSelect<T extends boolean = true> {
-  productName?: T
-  productCode?: T
-  price?: T
-  stock?: T
-  status?: T
-  model?: T
-  updatedAt?: T
-  createdAt?: T
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "variants_select".
- */
-export interface VariantsSelect<T extends boolean = true> {
-  variantName?: T
-  variantCode?: T
-  updatedAt?: T
-  createdAt?: T
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "customers_select".
- */
-export interface CustomersSelect<T extends boolean = true> {
-  name?: T
-  phone?: T
-  addresses?:
-    | T
-    | {
-        name?: T
-        isDefault?: T
-        address?: T
-        province?: T
-        district?: T
-        subDistrict?: T
-        postalCode?: T
-        id?: T
-      }
-  updatedAt?: T
-  createdAt?: T
-  email?: T
-  resetPasswordToken?: T
-  resetPasswordExpiration?: T
-  salt?: T
-  hash?: T
-  loginAttempts?: T
-  lockUntil?: T
-  name?: T;
-  phone?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -660,36 +557,103 @@ export interface CustomersSelect<T extends boolean = true> {
   sessions?:
     | T
     | {
-        id?: T
-        createdAt?: T
-        expiresAt?: T
-      }
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "address_select".
+ * via the `definition` "models_select".
  */
-export interface AddressSelect<T extends boolean = true> {
-  customer?: T
-  name?: T
-  isDefault?: T
-  address?: T
-  province?: T
-  district?: T
-  subDistrict?: T
-  postalCode?: T
-  updatedAt?: T
-  createdAt?: T
-  customer?: T;
-  name?: T;
-  isDefault?: T;
-  address?: T;
-  province?: T;
-  district?: T;
-  subDistrict?: T;
-  postalCode?: T;
+export interface ModelsSelect<T extends boolean = true> {
+  modelName?: T;
+  modelCode?: T;
+  type?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "types_select".
+ */
+export interface TypesSelect<T extends boolean = true> {
+  typeName?: T;
+  typeCode?: T;
+  category?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories_select".
+ */
+export interface CategoriesSelect<T extends boolean = true> {
+  categoryName?: T;
+  categoryCode?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products_select".
+ */
+export interface ProductsSelect<T extends boolean = true> {
+  productName?: T;
+  productCode?: T;
+  price?: T;
+  stock?: T;
+  status?: T;
+  model?: T;
+  variant?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "variants_select".
+ */
+export interface VariantsSelect<T extends boolean = true> {
+  variantName?: T;
+  variantCode?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "customers_select".
+ */
+export interface CustomersSelect<T extends boolean = true> {
+  name?: T;
+  phone?: T;
+  addresses?:
+    | T
+    | {
+        name?: T;
+        isDefault?: T;
+        address?: T;
+        province?: T;
+        district?: T;
+        subDistrict?: T;
+        postalCode?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -803,40 +767,36 @@ export interface ContactRequestsSelect<T extends boolean = true> {
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
-  key?: T
-  data?: T
+  key?: T;
+  data?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents_select".
  */
 export interface PayloadLockedDocumentsSelect<T extends boolean = true> {
-  document?: T
-  globalSlug?: T
-  user?: T
-  updatedAt?: T
-  createdAt?: T
+  document?: T;
+  globalSlug?: T;
+  user?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-preferences_select".
  */
 export interface PayloadPreferencesSelect<T extends boolean = true> {
-  user?: T
-  key?: T
-  value?: T
-  updatedAt?: T
-  createdAt?: T
+  user?: T;
+  key?: T;
+  value?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-migrations_select".
  */
 export interface PayloadMigrationsSelect<T extends boolean = true> {
-  name?: T
-  batch?: T
-  updatedAt?: T
-  createdAt?: T
   name?: T;
   batch?: T;
   updatedAt?: T;
@@ -1621,8 +1581,9 @@ export interface CmsBlogSelect<T extends boolean = true> {
  * via the `definition` "auth".
  */
 export interface Auth {
-  [k: string]: unknown
+  [k: string]: unknown;
 }
+
 
 declare module 'payload' {
   export interface GeneratedTypes extends Config {}
