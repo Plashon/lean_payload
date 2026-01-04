@@ -8,12 +8,14 @@ import {
   updateCustomer,
 } from '@/customer/customer.controller'
 import {
-  createAddress,
-  updateAddress,
+  addAddress,
   deleteAddress,
-  getAllAddresses,
+  getAddresses,
   getAddressById,
+  setDefaultAddress,
+  updateAddress,
 } from '@/address/address.controller'
+
 import type { CollectionConfig } from 'payload'
 
 export const Customers: CollectionConfig = {
@@ -45,8 +47,89 @@ export const Customers: CollectionConfig = {
       name: 'phone',
       type: 'text',
     },
+    {
+      name: 'addresses',
+      type: 'array',
+      label: 'Addresses',
+      fields: [
+        {
+          name: 'name',
+          type: 'text',
+          label: 'Address Name',
+          required: true,
+          admin: {
+            description: 'e.g., Home, Office, Headquarters',
+          },
+        },
+        {
+          name: 'isDefault',
+          type: 'checkbox',
+          label: 'Default Address',
+          defaultValue: false,
+          admin: {
+            description: 'Mark this as the default address',
+          },
+        },
+        {
+          type: 'row',
+          fields: [
+            {
+              name: 'address',
+              type: 'textarea',
+              label: 'Address',
+              required: true,
+              admin: {
+                width: '50%',
+              },
+            },
+            {
+              name: 'province',
+              type: 'text',
+              label: 'Province',
+              required: true,
+              admin: {
+                width: '50%',
+              },
+            },
+          ],
+        },
+        {
+          type: 'row',
+          fields: [
+            {
+              name: 'district',
+              type: 'text',
+              label: 'District',
+              required: true,
+              admin: {
+                width: '50%',
+              },
+            },
+            {
+              name: 'subDistrict',
+              type: 'text',
+              label: 'Sub District',
+              required: true,
+              admin: {
+                width: '50%',
+              },
+            },
+          ],
+        },
+        {
+          name: 'postalCode',
+          type: 'text',
+          label: 'Postal Code',
+          required: true,
+          admin: {
+            width: '50%',
+          },
+        },
+      ],
+    },
   ],
   endpoints: [
+    // Customer endpoints
     {
       path: '/create',
       method: 'post',
@@ -72,25 +155,36 @@ export const Customers: CollectionConfig = {
       method: 'delete',
       handler: deleteCustomer,
     },
-    {
-      path: '/:id/addresses',
-      method: 'post',
-      handler: createAddress,
-    },
+    // Address endpoints
     {
       path: '/:id/addresses',
       method: 'get',
-      handler: getAllAddresses,
+      handler: getAddresses,
     },
     {
-      path: '/:id/addresses/:addressId',
+      path: '/:id/addresses/:addressIndex',
+      method: 'get',
+      handler: getAddressById,
+    },
+    {
+      path: '/:id/addresses',
+      method: 'post',
+      handler: addAddress,
+    },
+    {
+      path: '/:id/addresses/:addressIndex',
       method: 'put',
       handler: updateAddress,
     },
     {
-      path: '/:id/addresses/:addressId',
+      path: '/:id/addresses/:addressIndex',
       method: 'delete',
       handler: deleteAddress,
+    },
+    {
+      path: '/:id/addresses/:addressIndex/set-default',
+      method: 'patch',
+      handler: setDefaultAddress,
     },
   ],
 }

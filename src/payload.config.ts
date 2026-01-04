@@ -9,7 +9,6 @@ import sharp from 'sharp'
 import { Admins } from './collections/Admin'
 import { Categories } from './collections/Category'
 import { Customers } from './collections/Customer'
-import { Address } from './collections/Address'
 import { Medias } from './collections/Media'
 import { Models } from './collections/Model'
 import { Products } from './collections/Product'
@@ -38,6 +37,14 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
+  globals: [
+    Footer,
+    Home,
+    CMS_WarrantyServices,
+    CMS_AboutUs,
+    CMS_TermsConditions,
+    CMS_PrivacyPolicy,
+  ],
   collections: [
     Admins,
     Models,
@@ -51,6 +58,7 @@ export default buildConfig({
     GlobalMedias,
     Blog,
     ContactRequests,
+    Blog,
   ],
   globals: [
     Footer,
