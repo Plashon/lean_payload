@@ -1,14 +1,13 @@
 import z from 'zod'
 
 const AddressSchema = z.object({
-  customer: z.string().nonempty('Customer ID is required'),
-  name: z.string().nonempty('Address name is required'),
-  isDefault: z.boolean().optional(),
-  address: z.string().nonempty('Address is required'),
-  province: z.string().nonempty('Province is required'),
-  district: z.string().nonempty('District is required'),
-  subDistrict: z.string().nonempty('Sub District is required'),
-  postalCode: z.string().nonempty('Postal Code is required'),
+  name: z.string().nonempty('ต้องระบุชื่อที่อยู่'),
+  isDefault: z.boolean().optional().default(false),
+  address: z.string().nonempty('ต้องระบุที่อยู่'),
+  province: z.string().nonempty('ต้องระบุจังหวัด'),
+  district: z.string().nonempty('ต้องระบุเขต/อำเภอ'),
+  subDistrict: z.string().nonempty('ต้องระบุแขวง/ตำบล'),
+  postalCode: z.string().nonempty('ต้องระบุรหัสไปรษณีย์'),
 })
 
 const AddressValidator = {

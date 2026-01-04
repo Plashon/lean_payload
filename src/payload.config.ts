@@ -9,7 +9,6 @@ import sharp from 'sharp'
 import { Admins } from './collections/Admin'
 import { Categories } from './collections/Category'
 import { Customers } from './collections/Customer'
-import { Address } from './collections/Address'
 import { Models } from './collections/Model'
 import { Products } from './collections/Product'
 import { Types } from './collections/Type'
@@ -25,7 +24,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Admins, Models, Types, Categories, Products, Variants, Customers, Address],
+  collections: [Admins, Models, Types, Categories, Products, Variants, Customers],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
