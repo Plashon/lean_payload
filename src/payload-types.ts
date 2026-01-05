@@ -79,6 +79,7 @@ export interface Config {
     'global-medias': GlobalMedia;
     blog: Blog;
     'contact-requests': ContactRequest;
+    orders: Order;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -97,6 +98,7 @@ export interface Config {
     'global-medias': GlobalMediasSelect<false> | GlobalMediasSelect<true>;
     blog: BlogSelect<false> | BlogSelect<true>;
     'contact-requests': ContactRequestsSelect<false> | ContactRequestsSelect<true>;
+    orders: OrdersSelect<false> | OrdersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -422,6 +424,92 @@ export interface ContactRequest {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders".
+ */
+export interface Order {
+  id: string;
+  /**
+   * e.g., #1234
+   */
+  orderNumber: string;
+  customer: string | Customer;
+  status: 'to_pay' | 'to_ship' | 'to_receive' | 'completed' | 'cancelled';
+  statusTimeline?: {
+    toPay?: string | null;
+    toShip?: string | null;
+    toReceive?: string | null;
+    completed?: string | null;
+  };
+  /**
+   * e.g., Sunday, 5 Jan 2025, 07:00-19:00
+   */
+  estimatedDelivery?: string | null;
+  items: {
+    product: string | Product;
+    quantity: number;
+    id?: string | null;
+  }[];
+  pricing: {
+    subtotal: number;
+    /**
+     * Shipping cost in THB
+     */
+    shipping: number;
+    discount?: number | null;
+    total: number;
+  };
+  tracking?: {
+    carrier?: ('thailand_post' | 'kerry' | 'flash' | 'jnt' | 'dhl' | 'fedex') | null;
+    /**
+     * e.g., TH123456789
+     */
+    trackingNumber?: string | null;
+  };
+  shippingAddress: {
+    recipientName: string;
+    /**
+     * e.g., Kelari E-Commerce Co.,Ltd.
+     */
+    companyName?: string | null;
+    /**
+     * e.g., 1/7 Rama 2, Soi 54, Samaedum
+     */
+    address: string;
+    /**
+     * e.g., Bangkhuntien
+     */
+    subDistrict: string;
+    /**
+     * e.g., Bangkok
+     */
+    district: string;
+    province: string;
+    /**
+     * e.g., 10150
+     */
+    postalCode: string;
+    /**
+     * e.g., (66) 2896-2400
+     */
+    phone: string;
+  };
+  billingAddress?: {
+    sameAsShipping?: boolean | null;
+    recipientName?: string | null;
+    companyName?: string | null;
+    address?: string | null;
+    subDistrict?: string | null;
+    district?: string | null;
+    province?: string | null;
+    postalCode?: string | null;
+    phone?: string | null;
+  };
+  shippingMethod?: ('standard' | 'express') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -487,6 +575,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'contact-requests';
         value: string | ContactRequest;
+      } | null)
+    | ({
+        relationTo: 'orders';
+        value: string | Order;
       } | null);
   globalSlug?: string | null;
   user:
@@ -759,6 +851,73 @@ export interface ContactRequestsSelect<T extends boolean = true> {
   jobTitle?: T;
   interestedProducts?: T;
   message?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders_select".
+ */
+export interface OrdersSelect<T extends boolean = true> {
+  orderNumber?: T;
+  customer?: T;
+  status?: T;
+  statusTimeline?:
+    | T
+    | {
+        toPay?: T;
+        toShip?: T;
+        toReceive?: T;
+        completed?: T;
+      };
+  estimatedDelivery?: T;
+  items?:
+    | T
+    | {
+        product?: T;
+        quantity?: T;
+        id?: T;
+      };
+  pricing?:
+    | T
+    | {
+        subtotal?: T;
+        shipping?: T;
+        discount?: T;
+        total?: T;
+      };
+  tracking?:
+    | T
+    | {
+        carrier?: T;
+        trackingNumber?: T;
+      };
+  shippingAddress?:
+    | T
+    | {
+        recipientName?: T;
+        companyName?: T;
+        address?: T;
+        subDistrict?: T;
+        district?: T;
+        province?: T;
+        postalCode?: T;
+        phone?: T;
+      };
+  billingAddress?:
+    | T
+    | {
+        sameAsShipping?: T;
+        recipientName?: T;
+        companyName?: T;
+        address?: T;
+        subDistrict?: T;
+        district?: T;
+        province?: T;
+        postalCode?: T;
+        phone?: T;
+      };
+  shippingMethod?: T;
   updatedAt?: T;
   createdAt?: T;
 }

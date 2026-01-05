@@ -16,6 +16,7 @@ import { Types } from './collections/Type'
 import { Variants } from './collections/Variant'
 import { GlobalMedias } from './collections/GlobalMedia'
 import { Blog } from './collections/Blog'
+import { Orders } from './collections/Order'
 
 import { Footer } from '@/global/Footer'
 import { Home } from './global/Home'
@@ -49,6 +50,7 @@ export default buildConfig({
     GlobalMedias,
     Blog,
     ContactRequests,
+    Orders,
   ],
   globals: [
     Footer,
