@@ -222,6 +222,7 @@ export interface Type {
   typeName: string;
   typeCode: string;
   category?: (string | null) | Category;
+  description?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -672,6 +673,7 @@ export interface ModelsSelect<T extends boolean = true> {
 export interface TypesSelect<T extends boolean = true> {
   typeName?: T;
   typeCode?: T;
+  description?: T;
   category?: T;
   updatedAt?: T;
   createdAt?: T;
