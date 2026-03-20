@@ -1,67 +1,269 @@
-# Payload Blank Template
+# My Payload Project
 
-This template comes configured with the bare minimum to get started on anything you need.
+A full-featured e-commerce CMS platform built with **Payload CMS** and **Next.js**, supporting customer management, product catalogs, order processing, and rich content management.
 
-## Quick start
+---
 
-This template can be deployed directly from our Cloud hosting and it will setup MongoDB and cloud S3 object storage for media.
+## Table of Contents
 
-## Quick Start - local setup
+- [Technology Stack](#technology-stack)
+- [System Architecture](#system-architecture)
+- [Modules & Features](#modules--features)
+- [Access Control](#access-control)
+- [Getting Started](#getting-started)
+- [Testing](#testing)
+- [Project Structure](#project-structure)
 
-To spin up this template locally, follow these steps:
+---
 
-### Clone
+## Technology Stack
 
-After you click the `Deploy` button above, you'll want to have standalone copy of this repo on your machine. If you've already cloned this repo, skip to [Development](#development).
+| Layer | Technology | Version |
+|-------|-----------|---------|
+| CMS Backend | Payload CMS | 3.65.0 |
+| Web Framework | Next.js (App Router) | 15.4.7 |
+| UI Library | React | 19.1.0 |
+| Database | MongoDB (Mongoose adapter) | — |
+| Runtime | Node.js | >=18.20.2 or >=20.9.0 |
+| API | Express + GraphQL | 5.1.0 / 16.8.1 |
+| Validation | Zod | 4.1.13 |
+| Rich Text | Lexical Editor | — |
+| Testing (Unit/Int) | Vitest | 3.2.3 |
+| Testing (E2E) | Playwright | 1.56.1 |
+| Language | TypeScript | 5.7.3 |
+| Package Manager | pnpm | — |
 
-### Development
+---
 
-1. First [clone the repo](#clone) if you have not done so already
-2. `cd my-project && cp .env.example .env` to copy the example environment variables. You'll need to add the `MONGODB_URI` from your Cloud project to your `.env` if you want to use S3 storage and the MongoDB database that was created for you.
+## System Architecture
 
-3. `pnpm install && pnpm dev` to install dependencies and start the dev server
-4. open `http://localhost:3000` to open the app in your browser
+```
+┌─────────────────────────────────────────────────────────────┐
+│                      Next.js Application                    │
+├──────────────────────────┬──────────────────────────────────┤
+│     Frontend Routes      │          API Routes              │
+│     (Next.js Pages)      │     (Payload Endpoints)          │
+├──────────────────────────┼──────────────────────────────────┤
+│  (frontend)/             │  (payload)/api/[...slug]         │
+│  - Home page             │  - Customer endpoints            │
+│  - Product catalog       │  - Order endpoints               │
+│  - Blog                  │  - Product endpoints             │
+│  - Contact               │  - Category / Type / Model       │
+│                          │  - Variant / Blog / Media        │
+│                          │  - Address / Contact Request     │
+├──────────────────────────┼──────────────────────────────────┤
+│  (payload)/admin         │  GraphQL Endpoint                │
+│  - CMS Dashboard         │  - /api/graphql                  │
+│  - Collection CRUD       │  - /api/graphql-playground       │
+│  - Global Settings       │                                  │
+└──────────────────────────┴──────────────────────────────────┘
+                               │
+                               ▼
+                      ┌─────────────────┐
+                      │   Payload CMS   │
+                      │  Collections    │
+                      │  Globals        │
+                      │  Access Control │
+                      │  Validators     │
+                      └─────────────────┘
+                               │
+                               ▼
+                       ┌──────────────┐
+                       │   MongoDB    │
+                       └──────────────┘
+```
 
-That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.
+**Request Flow:**
+1. Client sends request to Next.js application
+2. App Router directs to frontend page or API handler
+3. Payload CMS processes API requests through custom endpoints
+4. Controllers validate input via Zod schemas
+5. Access control checks enforce role-based permissions
+6. Data is read from / written to MongoDB via Mongoose
 
-#### Docker (Optional)
+---
 
-If you prefer to use Docker for local development instead of a local MongoDB instance, the provided docker-compose.yml file can be used.
+## Modules & Features
 
-To do so, follow these steps:
+### Collections (Data Models)
 
-- Modify the `MONGODB_URI` in your `.env` file to `mongodb://127.0.0.1/<dbname>`
-- Modify the `docker-compose.yml` file's `MONGODB_URI` to match the above `<dbname>`
-- Run `docker-compose up` to start the database, optionally pass `-d` to run in the background.
+| Collection | Description | Access |
+|-----------|-------------|--------|
+| **Admin** | System administrators | Admin only |
+| **Customer** | Registered end users with address book and order history | Public create, customer update, admin delete |
+| **Product** | Product catalog with pricing and stock tracking | Public read, admin CRUD |
+| **Order** | Customer orders with full lifecycle tracking | Public create/read, admin update/delete |
+| **Category** | Top-level product categorization | Public read, admin CRUD |
+| **Type** | Product type classification, linked to Category | Public read, admin CRUD |
+| **Model** | Product models, linked to Type | Public read, admin CRUD |
+| **Variant** | Product variants (color, size, etc.) | Public read, admin CRUD |
+| **Blog** | Articles and content posts with rich text | Public read, admin CRUD |
+| **Media** | Product image uploads (JPEG/PNG) | Public read, admin CRUD |
+| **GlobalMedia** | Site-wide images used in CMS content | Admin managed |
+| **ContactRequests** | Contact form submissions | Public create, admin read/manage |
 
-## How it works
+### Database Relationships
 
-The Payload config is tailored specifically to the needs of most websites. It is pre-configured in the following ways:
+```
+Customer ──→ many Addresses
+         └──→ many Orders
 
-### Collections
+Order ──→ Customer
+     └──→ many Products (via items)
 
-See the [Collections](https://payloadcms.com/docs/configuration/collections) docs for details on how to extend this functionality.
+Product ──→ Model ──→ Type ──→ Category
+        └──→ many Variants
+        └──→ many Media
+```
 
-- #### Users (Authentication)
+### Controllers (Business Logic)
 
-  Users are auth-enabled collections that have access to the admin panel.
+Each domain has dedicated controllers with full CRUD and business operations:
 
-  For additional help, see the official [Auth Example](https://github.com/payloadcms/payload/tree/main/examples/auth) or the [Authentication](https://payloadcms.com/docs/authentication/overview#authentication-overview) docs.
+- **Customer** — registration, profile management, lookup
+- **Order** — create, status transitions, pricing calculation
+- **Product** — catalog management, stock
+- **Category / Type / Model / Variant** — product taxonomy
+- **Address** — customer address book, default address management
+- **Blog** — article creation and retrieval
+- **Media / GlobalMedia** — file upload and management
+- **Contact Request** — form submission and admin retrieval
 
-- #### Media
+### Order Lifecycle
 
-  This is the uploads enabled collection. It features pre-configured sizes, focal point and manual resizing to help you manage your pictures.
+```
+To Pay → To Ship → To Receive → Completed
+                              ↘ Cancelled
+```
 
-### Docker
+Supported shipping carriers: Thailand Post, Kerry, Flash, J&T, DHL, FedEx
 
-Alternatively, you can use [Docker](https://www.docker.com) to spin up this template locally. To do so, follow these steps:
+### Global CMS Content
 
-1. Follow [steps 1 and 2 from above](#development), the docker-compose file will automatically use the `.env` file in your project root
-1. Next run `docker-compose up`
-1. Follow [steps 4 and 5 from above](#development) to login and create your first admin user
+Editable via the Payload admin panel (`/admin`):
 
-That's it! The Docker instance will help you get up and running quickly while also standardizing the development environment across your teams.
+| Global | Description |
+|--------|-------------|
+| **Home** | Hero slides, product showcase, brand intro |
+| **Footer** | Site-wide footer configuration |
+| **About Us** | About page content |
+| **Blog Settings** | Blog page configuration |
+| **Contact Us** | Contact page details |
+| **Privacy Policy** | Legal content |
+| **Terms & Conditions** | Legal content |
+| **Warranty & Services** | Service and warranty information |
+
+### API Endpoints
+
+| Domain | Method | Endpoint |
+|--------|--------|---------|
+| Customer | POST | `/api/customers/create` |
+| Customer | GET | `/api/customers/get-customers` |
+| Customer | GET | `/api/customers/get-by-id/:id` |
+| Order | POST | `/api/orders/create-order` |
+| Order | GET | `/api/orders/get-all-orders` |
+| Order | PATCH | `/api/orders/update-order/:id` |
+| Product | POST | `/api/products/create-product` |
+| Product | GET | `/api/products/get-all-products` |
+| Address | GET | `/api/customers/:id/addresses` |
+| Address | PATCH | `/api/customers/:id/addresses/:index/set-default` |
+| GraphQL | POST | `/api/graphql` |
+| GraphQL Playground | GET | `/api/graphql-playground` |
+
+---
+
+## Access Control
+
+| Role | Permissions |
+|------|------------|
+| **Admin** | Full CRUD on all collections, manage content and orders |
+| **Customer** | Read products/blogs, create and view own orders, manage own addresses |
+| **Public** | Read products, blogs, media; submit contact forms |
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js >= 18.20.2 or >= 20.9.0
+- pnpm
+- MongoDB instance (local or Docker)
+
+### Local Setup
+
+```bash
+pnpm install
+cp .env.example .env   # fill in DATABASE_URI and PAYLOAD_SECRET
+pnpm dev               # starts at http://localhost:3000
+```
+
+### Docker Setup
+
+```bash
+# Update MONGODB_URI in .env to: mongodb://127.0.0.1/<dbname>
+# Update docker-compose.yml MONGODB_URI to match <dbname>
+docker-compose up      # starts app + MongoDB
+```
+
+App available at `http://localhost:3000`. Follow on-screen instructions to create your first admin user.
+
+### Environment Variables
+
+| Variable | Description |
+|----------|-------------|
+| `DATABASE_URI` | MongoDB connection string |
+| `PAYLOAD_SECRET` | Secret key for Payload CMS session signing |
+
+### Build & Production
+
+```bash
+pnpm build
+pnpm start
+```
+
+---
+
+## Testing
+
+```bash
+pnpm test        # all tests
+pnpm test:int    # integration tests (Vitest)
+pnpm test:e2e    # end-to-end tests (Playwright)
+```
+
+| Suite | Tool | Location |
+|-------|------|----------|
+| Integration | Vitest | `tests/int/` |
+| End-to-End | Playwright | `tests/e2e/` |
+
+---
+
+## Project Structure
+
+```
+src/
+├── app/
+│   ├── (frontend)/          # Public-facing Next.js pages
+│   └── (payload)/           # Payload admin + API routes
+│       ├── admin/           # Admin panel
+│       └── api/             # API route handlers
+├── collections/             # Data model definitions (12 collections)
+├── controllers/             # Business logic per domain
+├── validators/              # Zod input validation schemas
+├── access/                  # Role-based access policies
+├── global/                  # Global CMS content definitions
+├── payload.config.ts        # Payload CMS configuration
+└── payload-types.ts         # Auto-generated TypeScript types
+tests/
+├── int/                     # Integration tests
+└── e2e/                     # End-to-end tests
+docker-compose.yml
+next.config.mjs
+```
+
+---
 
 ## Questions
 
-If you have any issues or questions, reach out to us on [Discord](https://discord.com/invite/payload) or start a [GitHub discussion](https://github.com/payloadcms/payload/discussions).
+If you have any issues or questions, reach out on [Discord](https://discord.com/invite/payload) or start a [GitHub discussion](https://github.com/payloadcms/payload/discussions).
